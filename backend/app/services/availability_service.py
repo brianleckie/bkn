@@ -7,7 +7,7 @@ timezone to reason about calendar days and working hours, then convert back.
 import uuid
 from datetime import date, datetime, timedelta, timezone
 
-import pytz
+from zoneinfo import ZoneInfo
 from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -40,7 +40,7 @@ async def get_available_slots(
     cancel_hours = int(await _get_setting(db, SETTING_CANCEL_HOURS, "2"))
     advance_days = int(await _get_setting(db, SETTING_ADVANCE_DAYS, "30"))
 
-    shop_tz = pytz.timezone(tz_str)
+    shop_tz = ZoneInfo(tz_str)
     now_local = datetime.now(shop_tz)
     today_local = now_local.date()
 
@@ -63,8 +63,8 @@ async def get_available_slots(
         return []
 
     # Build naive local datetimes for the working window
-    day_start = shop_tz.localize(datetime.combine(local_date, schedule.start_time))
-    day_end = shop_tz.localize(datetime.combine(local_date, schedule.end_time))
+    day_start = datetime.combine(local_date, schedule.start_time).replace(tzinfo=shop_tz)
+    day_end = datetime.combine(local_date, schedule.end_time).replace(tzinfo=shop_tz)
 
     # Generate all slots within the working window
     slots: list[tuple[datetime, datetime]] = []
@@ -74,8 +74,8 @@ async def get_available_slots(
         slot_end = cursor + slot_delta
         # Skip break period
         if schedule.break_start and schedule.break_end:
-            break_s = shop_tz.localize(datetime.combine(local_date, schedule.break_start))
-            break_e = shop_tz.localize(datetime.combine(local_date, schedule.break_end))
+            break_s = datetime.combine(local_date, schedule.break_start).replace(tzinfo=shop_tz)
+            break_e = datetime.combine(local_date, schedule.break_end).replace(tzinfo=shop_tz)
             if cursor < break_e and slot_end > break_s:
                 cursor += slot_delta
                 continue
