@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #0A0A0A;
+  overflow-x: hidden;
+}
+
+* { box-sizing: border-box; }
+
+::selection { background: #B8996A; color: #0A0A0A; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: #0A0A0A;
+  color: #F0EDE8;
+}
+
+.bkn-scroll::-webkit-scrollbar { display: none; }
+.bkn-scroll { scrollbar-width: none; }
+
+input:focus, select:focus {
+  outline: 2px solid #B8996A;
+  outline-offset: -2px;
+}
+input::placeholder { color: rgba(240,237,232,0.25); }
+button:active { opacity: 0.85; }
+
+/* Design tokens as CSS vars for inline-style reuse */
+:root {
+  --gold: #B8996A;
+  --black: #0A0A0A;
+  --stripe: repeating-linear-gradient(135deg,rgba(200,200,200,0.06) 0 1px,transparent 1px 7px);
+}
+
+/* Outline text (brutalist hollow) */
+.bkn-outline {
+  -webkit-text-stroke: 1.5px #C8C8C8;
+  color: transparent;
+}
+
+/* Stripe background (disabled/busy slots) */
+.bkn-stripe {
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(200,200,200,0.06) 0 1px,
+    transparent 1px 7px
+  );
+}
+
+/* Scroll-reveal */
+.bkn-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+              transform 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+.bkn-reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Keyframes */
+@keyframes bknLine {
+  0%   { transform-origin: left; transform: scaleX(0); }
+  100% { transform-origin: left; transform: scaleX(1); }
+}
+@keyframes bknFadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes bknFade {
+  0%   { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes bknModal {
+  0%   { transform: translateY(24px); opacity: 0; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
+
+.anim-bkn-line    { animation: bknLine   0.9s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+.anim-bkn-fadein  { animation: bknFadeIn 0.8s ease 0.6s both; }
+.anim-bkn-fade    { animation: bknFade   0.4s cubic-bezier(0.16,1,0.3,1); }
+.anim-bkn-modal   { animation: bknModal  0.28s cubic-bezier(0.16,1,0.3,1); }
