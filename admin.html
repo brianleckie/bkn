@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — BKN Barbershop</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;background:#0A0A0A;}
+  *{box-sizing:border-box;}
+  ::selection{background:#B8996A;color:#0A0A0A;}
+  body{font-family:'Montserrat',sans-serif;background:#0A0A0A;color:#F0EDE8;min-height:100vh;}
+  .bkn-scroll::-webkit-scrollbar{display:none;}
+  @keyframes bknModal{0%{transform:translateY(24px);opacity:0}100%{transform:translateY(0);opacity:1}}
+  input,select{outline:none;}
+  input:focus,select:focus{outline:2px solid #B8996A;outline-offset:-2px;}
+  button:active{opacity:.85;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div style="width:100%;max-width:360px;">
+    <div style="text-align:center;margin-bottom:40px;">
+      <img src="assets/bkn-logo.jpg" alt="BKN" style="width:60px;height:60px;object-fit:contain;mix-blend-mode:screen;margin:0 auto 16px;display:block;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:8px;color:#F0EDE8;margin-bottom:4px;padding-left:8px;">BKN</div>
+      <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#666;">Panel de Administración</div>
+    </div>
+    <div id="login-error" style="display:none;margin-bottom:16px;padding:12px 14px;background:rgba(212,104,95,0.1);border:1px solid rgba(212,104,95,0.3);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;color:#d4685f;"></div>
+    <div style="margin-bottom:8px;font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:#666;">Email</div>
+    <input id="login-email" type="email" placeholder="admin@bknbarbershop.com" style="width:100%;padding:14px 16px;background:#0E0E0E;border:1px solid rgba(200,200,200,0.12);color:#F0EDE8;font-family:'DM Mono',monospace;font-size:13px;margin-bottom:16px;">
+    <div style="margin-bottom:8px;font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:#666;">Contraseña</div>
+    <input id="login-pass" type="password" placeholder="••••••••" style="width:100%;padding:14px 16px;background:#0E0E0E;border:1px solid rgba(200,200,200,0.12);color:#F0EDE8;font-family:'DM Mono',monospace;font-size:13px;margin-bottom:24px;">
+    <button id="login-btn" onclick="doLogin()" style="width:100%;padding:16px;background:#B8996A;color:#0A0A0A;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;font-weight:500;">Ingresar →</button>
+    <div style="text-align:center;margin-top:20px;"><a href="index.html" style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(240,237,232,0.3);text-decoration:none;">‹ Volver al sitio</a></div>
+  </div>
+</div>
+
+<!-- DASHBOARD (hidden until logged in) -->
+<div id="dashboard" style="display:none;min-height:100vh;">
+
+  <!-- TOP BAR -->
+  <div style="position:sticky;top:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(10,10,10,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,200,200,0.08);">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img src="assets/bkn-logo.jpg" alt="BKN" style="width:30px;height:30px;object-fit:contain;mix-blend-mode:screen;">
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:5px;color:#F0EDE8;padding-left:2px;">BKN</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div id="live-clock" style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;color:#666;text-align:right;"></div>
+      <button onclick="doLogout()" style="background:transparent;border:1px solid rgba(200,200,200,0.16);color:rgba(240,237,232,0.5);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;padding:7px 12px;cursor:pointer;">Salir</button>
+    </div>
+  </div>
+
+  <div style="padding:28px 24px 0;">
+    <!-- HEADER -->
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px;">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#B8996A;margin-bottom:8px;">Panel de administración</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,9vw,56px);letter-spacing:2px;line-height:.9;color:#F0EDE8;">AGENDA <span style="-webkit-text-stroke:1.5px #C8C8C8;color:transparent;">BKN</span></div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div id="kpis" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:24px;"></div>
+
+    <!-- TOOLBAR -->
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <div style="display:flex;border:1px solid rgba(200,200,200,0.1);">
+        <button onclick="setView('day')" id="tab-day" class="view-tab" style="font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:2px;padding:9px 15px;border:none;cursor:pointer;text-transform:uppercase;background:#B8996A;color:#0A0A0A;font-weight:500;">DÍA</button>
+        <button onclick="setView('week')" id="tab-week" class="view-tab" style="font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:2px;padding:9px 15px;border:none;cursor:pointer;text-transform:uppercase;background:transparent;color:rgba(240,237,232,0.5);">SEMANA</button>
+        <button onclick="setView('list')" id="tab-list" class="view-tab" style="font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:2px;padding:9px 15px;border:none;cursor:pointer;text-transform:uppercase;background:transparent;color:rgba(240,237,232,0.5);">LISTA</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:9px;">
+        <span style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#666;">Barbero</span>
+        <div id="barber-filter" style="display:flex;border:1px solid rgba(200,200,200,0.1);"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEWS -->
+  <div id="view-container" style="padding:18px 24px 80px;"></div>
+
+  <!-- NEW BLOCKED SLOT BTN -->
+  <div style="position:fixed;bottom:24px;right:24px;z-index:50;">
+    <button onclick="openBlockModal()" style="padding:14px 20px;background:#1A1A1A;border:1px solid rgba(200,200,200,0.16);color:rgba(240,237,232,0.6);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">+ Bloquear franja</button>
+  </div>
+</div>
+
+<!-- MODAL TURNO -->
+<div id="modal-overlay" onclick="closeModal()" style="display:none;position:fixed;inset:0;z-index:1500;background:rgba(0,0,0,0.74);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;">
+  <div id="modal-content" onclick="event.stopPropagation()" style="width:100%;max-width:420px;background:#111111;border:1px solid rgba(200,200,200,0.12);box-shadow:0 40px 100px rgba(0,0,0,0.6);animation:bknModal .28s cubic-bezier(.16,1,.3,1);max-height:92vh;overflow:auto;"></div>
+</div>
+
+<!-- MODAL BLOQUEO -->
+<div id="block-overlay" onclick="closeBlockModal()" style="display:none;position:fixed;inset:0;z-index:1500;background:rgba(0,0,0,0.74);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;">
+  <div onclick="event.stopPropagation()" style="width:100%;max-width:420px;background:#111111;border:1px solid rgba(200,200,200,0.12);box-shadow:0 40px 100px rgba(0,0,0,0.6);animation:bknModal .28s cubic-bezier(.16,1,.3,1);padding:24px;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:#F0EDE8;margin-bottom:20px;">BLOQUEAR FRANJA</div>
+    <div style="margin-bottom:8px;font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:#666;">Barbero (vacío = toda la barbería)</div>
+    <select id="block-barber" style="width:100%;padding:12px 14px;background:#0E0E0E;border:1px solid rgba(200,200,200,0.12);color:#F0EDE8;font-family:'DM Mono',monospace;font-size:12px;margin-bottom:16px;"></select>
+    <div style="margin-bottom:8px;font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:#666;">Desde</div>
+    <input id="block-start" type="datetime-local" style="width:100%;padding:12px 14px;background:#0E0E0E;border:1px solid rgba(200,200,200,0.12);color:#F0EDE8;font-family:'DM Mono',monospace;font-size:12px;margin-bottom:16px;color-scheme:dark;">
+    <div style="margin-bottom:8px;font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:#666;">Hasta</div>
+    <input id="block-end" type="datetime-local" style="width:100%;padding:12px 14px;background:#0E0E0E;border:1px solid rgba(200,200,200,0.12);color:#F0EDE8;font-family:'DM Mono',monospace;font-size:12px;margin-bottom:16px;color-scheme:dark;">
+    <div style="margin-bottom:8px;font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:#666;">Motivo (opcional)</div>
+    <input id="block-reason" type="text" placeholder="Ej: Vacaciones, mantenimiento..." style="width:100%;padding:12px 14px;background:#0E0E0E;border:1px solid rgba(200,200,200,0.12);color:#F0EDE8;font-family:'DM Mono',monospace;font-size:12px;margin-bottom:24px;">
+    <div id="block-error" style="display:none;margin-bottom:16px;padding:12px;background:rgba(212,104,95,0.1);border:1px solid rgba(212,104,95,0.3);font-family:'DM Mono',monospace;font-size:9px;color:#d4685f;"></div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="closeBlockModal()" style="flex:1;padding:14px;background:transparent;color:#C8C8C8;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(200,200,200,0.2);cursor:pointer;">Cancelar</button>
+      <button onclick="submitBlock()" style="flex:1;padding:14px;background:#B8996A;color:#0A0A0A;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;font-weight:500;">Bloquear</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = window.BKN_API || '';
+const GOLD = '#B8996A', BLACK = '#0A0A0A';
+const STRIPE = 'repeating-linear-gradient(135deg,rgba(200,200,200,0.06) 0 1px,transparent 1px 7px)';
+const WK_SHORT = ['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'];
+const MONTHS_SHORT = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+
+// ── Auth ──────────────────────────────────────────────────────────────────────
+let token = localStorage.getItem('bkn_token');
+let adminView = 'day';
+let barberFilter = 'all';
+let BARBERS = [];
+let appts = [];
+let modal = null;
+
+// ── Login ─────────────────────────────────────────────────────────────────────
+async function doLogin(){
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const errEl = document.getElementById('login-error');
+  const btn = document.getElementById('login-btn');
+  btn.textContent = 'Ingresando...'; btn.disabled = true; errEl.style.display = 'none';
+  try {
+    const form = new FormData();
+    form.append('username', email); form.append('password', pass);
+    const res = await fetch(API + '/api/v1/auth/login', { method:'POST', body: form });
+    if(!res.ok) throw new Error('Credenciales incorrectas');
+    const data = await res.json();
+    token = data.access_token;
+    localStorage.setItem('bkn_token', token);
+    showDashboard();
+  } catch(e){
+    errEl.textContent = e.message || 'Error al iniciar sesión';
+    errEl.style.display = ''; btn.textContent = 'Ingresar →'; btn.disabled = false;
+  }
+}
+
+document.getElementById('login-pass').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
+
+function doLogout(){
+  token = null; localStorage.removeItem('bkn_token');
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+// ── API helpers ───────────────────────────────────────────────────────────────
+async function apiFetch(path, opts={}){
+  const res = await fetch(API + path, { ...opts, headers: { 'Authorization':'Bearer '+token, 'Content-Type':'application/json', ...(opts.headers||{}) } });
+  if(res.status === 401){ doLogout(); throw new Error('Session expired'); }
+  return res;
+}
+
+// ── Dashboard init ────────────────────────────────────────────────────────────
+async function showDashboard(){
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('dashboard').style.display = '';
+  startClock();
+  await loadBarbers();
+  await loadAppointments();
+  renderBarberFilter();
+  renderKPIs();
+  renderView();
+}
+
+function startClock(){
+  function tick(){
+    const now = new Date();
+    const d = now;
+    const days = ['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'];
+    const months = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+    const str = `${days[d.getDay()]} ${pad(d.getDate())} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    const time = `${pad(d.getHours())}:${pad(d.getMinutes())} · EN VIVO`;
+    const el = document.getElementById('live-clock');
+    if(el) el.innerHTML = `${str}<br><span style="color:#B8996A;">${time}</span>`;
+  }
+  tick(); setInterval(tick, 30000);
+}
+
+async function loadBarbers(){
+  try {
+    const res = await apiFetch('/api/v1/admin/barbers');
+    BARBERS = await res.json();
+  } catch(e){ BARBERS = []; }
+}
+
+async function loadAppointments(){
+  try {
+    const today = todayStr();
+    const res = await apiFetch(`/api/v1/admin/appointments?date_from=${today}`);
+    appts = await res.json();
+  } catch(e){ appts = []; }
+}
+
+const pad = n => String(n).padStart(2,'0');
+function todayStr(){ return new Date().toISOString().split('T')[0]; }
+function fmtTime(iso){ return iso ? iso.substring(11,16) : ''; }
+function fmtDateLabel(iso){ if(!iso) return ''; const d = new Date(iso); return `${WK_SHORT[d.getDay()]} ${pad(d.getDate())} ${MONTHS_SHORT[d.getMonth()]}`; }
+
+// ── Barber filter ─────────────────────────────────────────────────────────────
+function renderBarberFilter(){
+  const chipBase = "font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:1.5px;padding:8px 12px;border:none;cursor:pointer;transition:all .2s;text-transform:uppercase;line-height:1;";
+  const mkChip = (id, label, active) => `<button onclick="setBarberFilter('${id}')" style="${chipBase}background:${active?GOLD:'transparent'};color:${active?BLACK:'rgba(240,237,232,0.45)'};${active?'font-weight:500;':''}">${label}</button>`;
+  document.getElementById('barber-filter').innerHTML =
+    mkChip('all', 'TODOS', barberFilter==='all') +
+    BARBERS.map(b => mkChip(b.id, b.name.toUpperCase(), barberFilter===b.id)).join('');
+}
+
+function setBarberFilter(id){ barberFilter = id; renderBarberFilter(); renderView(); }
+
+// ── KPIs ──────────────────────────────────────────────────────────────────────
+function renderKPIs(){
+  const today = todayStr();
+  const nowH = new Date().getHours() + ':' + pad(new Date().getMinutes());
+  const todayAppts = appts.filter(a => a.start_datetime.startsWith(today) && a.status !== 'cancelled');
+  const ingresos = todayAppts.reduce((s,a) => s + (parseFloat(a.service_price)||0), 0);
+  const totalSlots = 10; // rough daily capacity
+  const occ = Math.round(todayAppts.length / totalSlots * 100);
+  const nextAppt = todayAppts.sort((a,b) => a.start_datetime.localeCompare(b.start_datetime)).find(a => fmtTime(a.start_datetime) > nowH);
+  const kpis = [
+    {label:'Turnos hoy', value:String(todayAppts.length), sub:'turnos activos'},
+    {label:'Ocupación', value:occ+'%', sub:totalSlots+' franjas diarias'},
+    {label:'Ingresos est.', value:ingresos>0?(ingresos.toLocaleString('es-PY')+' Gs'):'—', sub:'hoy'},
+    {label:'Próximo', value:nextAppt?fmtTime(nextAppt.start_datetime):'—', sub:nextAppt?nextAppt.client_name:'Sin pendientes'},
+  ];
+  document.getElementById('kpis').innerHTML = kpis.map(k => `
+    <div style="background:#111111;border:1px solid rgba(200,200,200,0.08);padding:18px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;width:2px;height:100%;background:#B8996A;opacity:.5;"></div>
+      <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#666;margin-bottom:10px;">${k.label}</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:1px;color:#B8996A;line-height:1;">${k.value}</div>
+      <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:rgba(240,237,232,0.4);margin-top:6px;">${k.sub}</div>
+    </div>`).join('');
+}
+
+// ── View tabs ─────────────────────────────────────────────────────────────────
+function setView(v){
+  adminView = v;
+  document.querySelectorAll('.view-tab').forEach(btn => {
+    const active = btn.id === 'tab-'+v;
+    btn.style.background = active ? GOLD : 'transparent';
+    btn.style.color = active ? BLACK : 'rgba(240,237,232,0.5)';
+    btn.style.fontWeight = active ? '500' : '';
+  });
+  renderView();
+}
+
+function renderView(){
+  if(adminView === 'day') renderDayView();
+  else if(adminView === 'week') renderWeekView();
+  else renderListView();
+}
+
+// ── Filter appts ──────────────────────────────────────────────────────────────
+function filteredAppts(list){
+  if(barberFilter === 'all') return list;
+  return list.filter(a => a.barber_id === barberFilter);
+}
+
+// ── Day view ──────────────────────────────────────────────────────────────────
+function renderDayView(){
+  const today = todayStr();
+  const todayLabel = (() => { const d = new Date(today+'T00:00:00'); return `${WK_SHORT[d.getDay()]} ${pad(d.getDate())} ${MONTHS_SHORT[d.getMonth()]} · AGENDA DEL DÍA`; })();
+  const todayAppts = appts.filter(a => a.start_datetime.startsWith(today) && a.status !== 'cancelled');
+  const apptMap = {};
+  todayAppts.forEach(a => { apptMap[fmtTime(a.start_datetime)] = a; });
+
+  const SLOTS = [];
+  for(let h=9;h<19;h++) for(let m=0;m<60;m+=60) SLOTS.push(`${pad(h)}:${pad(m)}`);
+
+  const rows = SLOTS.map(t => {
+    const appt = apptMap[t];
+    const matches = !appt || barberFilter==='all' || appt.barber_id===barberFilter;
+    const booked = !!appt && matches;
+    const muted = !!appt && !matches;
+    const nowH = new Date().getHours() + ':' + pad(new Date().getMinutes());
+    const isNow = t === nowH.substring(0,5);
+    const timeStyle = `width:54px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.5px;border:1px solid rgba(200,200,200,0.08);${isNow?`color:${GOLD};border-color:rgba(184,153,106,0.4);`:`color:#666;`}`;
+    let barStyle = `flex:1;min-width:0;padding:12px 14px;border:1px solid rgba(200,200,200,0.08);display:flex;align-items:center;transition:all .18s;`;
+    let onclick = '';
+    if(booked){ barStyle += `background:rgba(184,153,106,0.08);border-left:2px solid ${GOLD};cursor:pointer;`; onclick = `openModal('${appt.id}')`; }
+    else if(muted){ barStyle += `background:#0C0C0C;opacity:.5;`; }
+    else { barStyle += `background:#0E0E0E;`; }
+
+    let inner = '';
+    if(booked) inner = `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;">
+      <div style="min-width:0;"><div style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:500;color:#F0EDE8;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${appt.client_name}</div>
+      <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.5px;color:rgba(240,237,232,0.45);">${appt.service_name||''}</div></div>
+      <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
+        <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:${GOLD};">${appt.barber_name||''}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;color:#F0EDE8;">${appt.service_price?parseFloat(appt.service_price).toLocaleString('es-PY')+' Gs':''}</div></div>
+        <span style="font-family:'DM Mono',monospace;font-size:15px;color:rgba(184,153,106,0.55);">›</span>
+      </div></div>`;
+    else if(muted) inner = `<div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+      <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(240,237,232,0.28);">Ocupado · otro barbero</span>
+      <span style="font-family:'DM Mono',monospace;font-size:8px;color:rgba(240,237,232,0.3);">${appt.barber_name||''}</span></div>`;
+    else inner = `<div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+      <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(240,237,232,0.28);">Disponible</span>
+      <span style="font-family:'DM Mono',monospace;font-size:13px;color:rgba(184,153,106,0.5);">+</span></div>`;
+
+    return `<div style="display:flex;gap:12px;align-items:stretch;">
+      <div style="${timeStyle}">${t}</div>
+      <div onclick="${onclick}" style="${barStyle}">${inner}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('view-container').innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(240,237,232,0.6);">${todayLabel}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">${rows}</div>`;
+}
+
+// ── Week view ─────────────────────────────────────────────────────────────────
+function renderWeekView(){
+  const today = new Date();
+  const dow = today.getDay(); // 0=Sun
+  const mondayOffset = dow === 0 ? -6 : 1 - dow;
+  const weekDays = [];
+  for(let i=0;i<6;i++){
+    const d = new Date(today);
+    d.setDate(today.getDate() + mondayOffset + i);
+    weekDays.push(d);
+  }
+  const cols = weekDays.map(d => {
+    const ds = d.toISOString().split('T')[0];
+    const isToday = ds === todayStr();
+    const list = filteredAppts(appts.filter(a => a.start_datetime.startsWith(ds) && a.status !== 'cancelled'));
+    const pct = Math.round(list.length / 10 * 100);
+    const headStyle = `padding:12px;border-bottom:1px solid rgba(200,200,200,0.08);${isToday?'background:rgba(184,153,106,0.1);':'background:#141414;'}`;
+    const items = list.sort((a,b)=>a.start_datetime.localeCompare(b.start_datetime)).map(a =>
+      `<div onclick="openModal('${a.id}')" style="padding:7px 8px;background:rgba(184,153,106,0.08);border-left:2px solid ${GOLD};cursor:pointer;transition:background .15s;">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:${GOLD};letter-spacing:.5px;">${fmtTime(a.start_datetime)}</div>
+        <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:500;color:#F0EDE8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${a.client_name}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:7px;color:rgba(240,237,232,0.4);">${a.barber_name||''}</div>
+      </div>`).join('');
+    return `<div style="flex:1 0 158px;min-width:158px;background:#111111;border:1px solid rgba(200,200,200,0.08);">
+      <div style="${headStyle}">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;">
+          <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;color:rgba(240,237,232,0.6);">${WK_SHORT[d.getDay()]}</span>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#F0EDE8;line-height:1;">${d.getDate()}</span>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:7px;letter-spacing:1px;color:${GOLD};margin-top:4px;">${list.length} turnos · ${pct}%</div>
+      </div>
+      <div style="padding:8px;display:flex;flex-direction:column;gap:5px;min-height:120px;">
+        ${items || `<div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:rgba(240,237,232,0.2);text-align:center;padding-top:24px;">Sin turnos</div>`}
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('view-container').innerHTML = `<div class="bkn-scroll" style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:6px;">${cols}</div>`;
+}
+
+// ── List view ─────────────────────────────────────────────────────────────────
+function renderListView(){
+  const today = todayStr();
+  const list = filteredAppts(appts.filter(a => a.start_datetime >= today && a.status !== 'cancelled'))
+    .sort((a,b) => a.start_datetime.localeCompare(b.start_datetime));
+  const items = list.map(a => {
+    const d = new Date(a.start_datetime);
+    const dateLabel = `${WK_SHORT[d.getDay()]} ${pad(d.getDate())}`;
+    const price = a.service_price ? parseFloat(a.service_price).toLocaleString('es-PY') + ' Gs' : '—';
+    return `<div onclick="openModal('${a.id}')" style="background:#111111;border:1px solid rgba(200,200,200,0.08);padding:16px;display:flex;gap:14px;align-items:center;cursor:pointer;transition:border-color .15s;">
+      <div style="text-align:center;flex-shrink:0;border-right:1px solid rgba(200,200,200,0.08);padding-right:14px;">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:#666;">${dateLabel}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:${GOLD};line-height:1.1;">${fmtTime(a.start_datetime)}</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:500;color:#F0EDE8;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${a.client_name}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.5px;color:rgba(240,237,232,0.45);">${a.service_name||''} · ${a.barber_name||''}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#F0EDE8;">${price}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;color:${GOLD};">Confirmado</div>
+      </div>
+    </div>`;
+  }).join('') || `<div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(240,237,232,0.3);text-align:center;padding:40px;">Sin turnos próximos</div>`;
+
+  document.getElementById('view-container').innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:8px;">${items}</div>`;
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+function openModal(apptId){
+  modal = appts.find(a => a.id === apptId);
+  if(!modal) return;
+  renderModal('menu');
+  document.getElementById('modal-overlay').style.display = 'flex';
+}
+function closeModal(){ document.getElementById('modal-overlay').style.display = 'none'; modal = null; }
+
+function waLink(phone, text){ return 'https://wa.me/' + phone.replace(/\D/g,'') + '?text=' + encodeURIComponent(text); }
+
+function renderModal(mode){
+  if(!modal) return;
+  const el = document.getElementById('modal-content');
+  const dateLabel = fmtDateLabel(modal.start_datetime);
+  const time = fmtTime(modal.start_datetime);
+  const price = modal.service_price ? parseFloat(modal.service_price).toLocaleString('es-PY') + ' Gs' : '—';
+  const phone = modal.client_phone || '';
+  const waReminder = waLink(phone, `Hola ${modal.client_name}, te recordamos tu turno en BKN Barbershop: ${dateLabel} a las ${time} hs. ¡Te esperamos!`);
+
+  const header = `<div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid rgba(200,200,200,0.08);background:#1A1A1A;">
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:${GOLD};margin-bottom:4px;">${dateLabel}</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:#F0EDE8;line-height:1;">${time} HS</div>
+    </div>
+    <button onclick="closeModal()" style="width:34px;height:34px;border:1px solid rgba(200,200,200,0.12);background:transparent;color:#999;cursor:pointer;font-size:16px;line-height:1;">✕</button>
+  </div>`;
+
+  if(mode === 'menu'){
+    el.innerHTML = header + `<div style="padding:20px;">
+      <div style="font-family:'Montserrat',sans-serif;font-size:19px;font-weight:500;color:#F0EDE8;margin-bottom:16px;">${modal.client_name}</div>
+      <div style="display:flex;flex-direction:column;gap:1px;background:rgba(200,200,200,0.06);border:1px solid rgba(200,200,200,0.06);margin-bottom:22px;">
+        ${[['Servicio',modal.service_name||'—'],['Barbero',modal.barber_name||'—'],['WhatsApp',phone],['Precio',price]].map(([k,v])=>
+          `<div style="display:flex;justify-content:space-between;padding:12px 14px;background:#0E0E0E;">
+            <span style="font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:#666;">${k}</span>
+            <span style="font-size:12px;font-weight:300;color:rgba(240,237,232,0.8);">${v}</span>
+          </div>`).join('')}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <button onclick="renderModal('cancel_confirm')" style="width:100%;padding:15px;background:transparent;color:#d4685f;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(212,104,95,0.28);cursor:pointer;">Cancelar turno</button>
+        <a href="${waReminder}" target="_blank" rel="noopener" style="display:block;width:100%;padding:15px;background:transparent;color:#25D366;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(37,211,102,0.3);cursor:pointer;text-decoration:none;text-align:center;">Avisar por WhatsApp</a>
+      </div>
+    </div>`;
+  } else if(mode === 'cancel_confirm'){
+    el.innerHTML = header + `<div style="padding:28px 22px;text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:#F0EDE8;margin-bottom:10px;">¿CANCELAR ESTE TURNO?</div>
+      <div style="font-size:12px;font-weight:300;color:rgba(240,237,232,0.5);line-height:1.7;max-width:280px;margin:0 auto 24px;">Se libera la franja de <span style="color:${GOLD};">${time} hs</span> de ${modal.client_name}.</div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="renderModal('menu')" style="flex:1;padding:14px;background:transparent;color:#C8C8C8;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(200,200,200,0.2);cursor:pointer;">Volver</button>
+        <button onclick="doCancel()" style="flex:1;padding:14px;background:#d4685f;color:${BLACK};font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;font-weight:500;">Sí, cancelar</button>
+      </div>
+    </div>`;
+  }
+}
+
+async function doCancel(){
+  if(!modal) return;
+  try {
+    await apiFetch(`/api/v1/admin/appointments/${modal.id}`, { method:'DELETE' });
+    appts = appts.filter(a => a.id !== modal.id);
+    closeModal(); renderKPIs(); renderView();
+  } catch(e){ alert('Error al cancelar: ' + e.message); }
+}
+
+// ── Blocked slots ─────────────────────────────────────────────────────────────
+function openBlockModal(){
+  const sel = document.getElementById('block-barber');
+  sel.innerHTML = `<option value="">Toda la barbería</option>` + BARBERS.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+  document.getElementById('block-start').value = '';
+  document.getElementById('block-end').value = '';
+  document.getElementById('block-reason').value = '';
+  document.getElementById('block-error').style.display = 'none';
+  document.getElementById('block-overlay').style.display = 'flex';
+}
+function closeBlockModal(){ document.getElementById('block-overlay').style.display = 'none'; }
+
+async function submitBlock(){
+  const barberId = document.getElementById('block-barber').value || null;
+  const start = document.getElementById('block-start').value;
+  const end = document.getElementById('block-end').value;
+  const reason = document.getElementById('block-reason').value.trim() || null;
+  const errEl = document.getElementById('block-error');
+  errEl.style.display = 'none';
+  if(!start || !end){ errEl.textContent = 'Completá fechas de inicio y fin'; errEl.style.display = ''; return; }
+  try {
+    await apiFetch('/api/v1/admin/blocked-slots', {
+      method:'POST',
+      body: JSON.stringify({ barber_id: barberId, start_datetime: new Date(start).toISOString(), end_datetime: new Date(end).toISOString(), reason }),
+    });
+    closeBlockModal();
+  } catch(e){ errEl.textContent = e.message || 'Error al bloquear'; errEl.style.display = ''; }
+}
+
+// ── Auto-login if token exists ────────────────────────────────────────────────
+if(token){
+  apiFetch('/api/v1/auth/me').then(r => r.json()).then(user => {
+    if(user.id) showDashboard();
+    else { token = null; localStorage.removeItem('bkn_token'); }
+  }).catch(() => { token = null; localStorage.removeItem('bkn_token'); });
+}
+</script>
+</body>
+</html>
