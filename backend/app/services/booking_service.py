@@ -4,7 +4,10 @@ Core booking logic: create, cancel, and update appointments.
 import uuid
 from datetime import datetime, timedelta, timezone
 
-import pytz
+import os
+import urllib.parse
+
+import httpx
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -69,6 +72,18 @@ async def create_appointment(db: AsyncSession, data: AppointmentCreate) -> Appoi
     )
     db.add(appt)
     await db.flush()  # get ID without committing
+
+    try:
+        phone = os.getenv("CALLMEBOT_PHONE", "")
+        apikey = os.getenv("CALLMEBOT_APIKEY", "")
+        if phone and apikey:
+            msg = f"Nuevo turno BKN: {appt.client_name} - {appt.service_id} - {appt.start_datetime.strftime('%d/%m %H:%M')}"
+            url = f"https://api.callmebot.com/whatsapp.php?phone={phone}&text={urllib.parse.quote(msg)}&apikey={apikey}"
+            async with httpx.AsyncClient() as client:
+                await client.get(url, timeout=5)
+    except Exception as e:
+        print(f"WhatsApp notification failed: {e}")
+
     return appt
 
 

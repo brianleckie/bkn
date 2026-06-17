@@ -165,7 +165,7 @@ export default function ConfirmStep({
           border: '1px solid rgba(200,200,200,0.12)',
           color: '#F0EDE8',
           fontFamily: '"DM Mono", monospace',
-          fontSize: 13,
+          fontSize: 16,
           letterSpacing: 1,
           marginBottom: 16,
         }}
@@ -197,7 +197,7 @@ export default function ConfirmStep({
           border: '1px solid rgba(200,200,200,0.12)',
           color: '#F0EDE8',
           fontFamily: '"DM Mono", monospace',
-          fontSize: 13,
+          fontSize: 16,
           letterSpacing: 1,
           marginBottom: 6,
         }}

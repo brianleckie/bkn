@@ -72,7 +72,7 @@ export default function LoginScreen({ onLogin }: Props) {
           value={email}
           onChange={e => setEmail(e.target.value)}
           placeholder="admin@bknbarbershop.com"
-          style={{ width: '100%', padding: '14px 16px', background: '#0E0E0E', border: '1px solid rgba(200,200,200,0.12)', color: '#F0EDE8', fontFamily: '"DM Mono", monospace', fontSize: 13, marginBottom: 16 }}
+          style={{ width: '100%', padding: '14px 16px', background: '#0E0E0E', border: '1px solid rgba(200,200,200,0.12)', color: '#F0EDE8', fontFamily: '"DM Mono", monospace', fontSize: 16, marginBottom: 16 }}
         />
 
         <div style={{ marginBottom: 8, fontFamily: '"DM Mono", monospace', fontSize: 8.5, letterSpacing: 1.5, textTransform: 'uppercase', color: '#666' }}>Contraseña</div>
@@ -82,7 +82,7 @@ export default function LoginScreen({ onLogin }: Props) {
           onChange={e => setPass(e.target.value)}
           onKeyDown={e => { if (e.key === 'Enter') doLogin() }}
           placeholder="••••••••"
-          style={{ width: '100%', padding: '14px 16px', background: '#0E0E0E', border: '1px solid rgba(200,200,200,0.12)', color: '#F0EDE8', fontFamily: '"DM Mono", monospace', fontSize: 13, marginBottom: 24 }}
+          style={{ width: '100%', padding: '14px 16px', background: '#0E0E0E', border: '1px solid rgba(200,200,200,0.12)', color: '#F0EDE8', fontFamily: '"DM Mono", monospace', fontSize: 16, marginBottom: 24 }}
         />
 
         <button
