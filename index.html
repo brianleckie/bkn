@@ -1,1139 +1,156 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>BKN — Barbería</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,700;1,200;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BKN Barbershop — Encarnación, Paraguay</title>
+<meta name="description" content="Barbería de precisión en Encarnación, Paraguay. Reservá tu turno online. Dos barberos, un estándar.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --black:   #0A0A0A;
-  --black2:  #111111;
-  --black3:  #1A1A1A;
-  --silver:  #C8C8C8;
-  --gold:    #B8996A;
-  --gold2:   #9A7A4A;
-  --white:   #F0EDE8;
-  --muted:   #666666;
-  --border:  rgba(200,200,200,0.08);
-  --safe-b:  env(safe-area-inset-bottom, 0px);
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-body {
-  background: var(--black);
-  color: var(--white);
-  font-family: 'Montserrat', sans-serif;
-  overflow-x: hidden;
-}
-
-/* ─── DEMO BANNER ─── */
-.demo-banner {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 9999;
-  background: var(--gold);
-  padding: 8px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.demo-text {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--black);
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.demo-dot {
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: var(--black);
-  animation: pulse 2s infinite;
-}
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-.demo-badge {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--black);
-  border: 1px solid rgba(0,0,0,0.3);
-  padding: 2px 10px;
-}
-
-/* ─── NAV ─── */
-nav {
-  position: fixed;
-  top: 30px; left: 0; right: 0;
-  z-index: 998;
-  height: 60px;
-  background: var(--black);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-}
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.nav-logo img {
-  width: 36px; height: 36px;
-  object-fit: contain;
-  filter: brightness(1.1);
-}
-.nav-logo-text {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  letter-spacing: 5px;
-  color: var(--white);
-}
-.nav-cta {
-  padding: 9px 22px;
-  background: var(--gold);
-  color: var(--black);
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  text-decoration: none;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-.nav-cta:active { background: var(--gold2); }
-
-/* ─── TICKER ─── */
-.ticker-wrap {
-  margin-top: 90px;
-  background: var(--black3);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  overflow: hidden;
-  padding: 11px 0;
-}
-.ticker-inner {
-  display: inline-block;
-  white-space: nowrap;
-  animation: ticker 22s linear infinite;
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  font-weight: 400;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-
-/* ─── HERO ─── */
-.hero {
-  min-height: calc(100svh - 90px - 36px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 52px 24px 40px;
-  position: relative;
-  overflow: hidden;
-  background: var(--black);
-}
-
-/* Grid lines decoration */
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(200,200,200,0.018) 80px, rgba(200,200,200,0.018) 81px),
-    repeating-linear-gradient(0deg, transparent, transparent 80px, rgba(200,200,200,0.018) 80px, rgba(200,200,200,0.018) 81px);
-  pointer-events: none;
-}
-
-/* Gold accent line */
-.hero-accent {
-  width: 48px;
-  height: 2px;
-  background: var(--gold);
-  margin-bottom: 20px;
-}
-
-.hero-overline {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 22px;
-}
-
-h1 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(80px, 23vw, 130px);
-  line-height: 0.85;
-  letter-spacing: 2px;
-  color: var(--white);
-  margin-bottom: 8px;
-}
-h1 .outline {
-  -webkit-text-stroke: 1.5px var(--silver);
-  color: transparent;
-}
-h1 .gold { color: var(--gold); }
-
-.hero-sub {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(30px, 8vw, 52px);
-  letter-spacing: 4px;
-  color: var(--muted);
-  margin-bottom: 30px;
-  line-height: 1;
-}
-
-.hero-desc {
-  font-size: 13px;
-  font-weight: 300;
-  line-height: 1.85;
-  color: rgba(240,237,232,0.45);
-  max-width: 300px;
-  margin-bottom: 32px;
-  letter-spacing: 0.3px;
-}
-
-.hero-btns {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 44px;
-}
-.btn-gold {
-  padding: 14px 30px;
-  background: var(--gold);
-  color: var(--black);
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  text-decoration: none;
-  display: inline-block;
-  font-weight: 500;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.2s;
-}
-.btn-gold:active { background: var(--gold2); }
-.btn-outline {
-  padding: 13px 30px;
-  background: transparent;
-  color: var(--silver);
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  text-decoration: none;
-  display: inline-block;
-  border: 1px solid rgba(200,200,200,0.2);
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Hero stats */
-.hero-stats {
-  display: flex;
-  gap: 0;
-  border: 1px solid var(--border);
-}
-.hero-stat {
-  flex: 1;
-  padding: 16px 12px;
-  text-align: center;
-  border-right: 1px solid var(--border);
-  position: relative;
-}
-.hero-stat:last-child { border-right: none; }
-.hero-stat-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 28px;
-  letter-spacing: 2px;
-  color: var(--gold);
-  display: block;
-  line-height: 1;
-}
-.hero-stat-lbl {
-  font-family: 'DM Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-  display: block;
-  margin-top: 4px;
-}
-
-/* ─── SECTION BASICS ─── */
-.section-overline {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.section-overline::before { content:''; width:20px; height:1px; background:var(--gold); }
-
-.section-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(44px, 11vw, 62px);
-  letter-spacing: 2px;
-  line-height: 0.9;
-  color: var(--white);
-  margin-bottom: 32px;
-}
-.section-title .outline {
-  -webkit-text-stroke: 1.5px var(--silver);
-  color: transparent;
-}
-
-/* ─── SERVICIOS ─── */
-.servicios {
-  padding: 64px 24px;
-  background: var(--black2);
-}
-
-.services-list {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--border);
-}
-.service-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 20px;
-  border-bottom: 1px solid var(--border);
-  transition: background 0.2s;
-  -webkit-tap-highlight-color: transparent;
-  position: relative;
-}
-.service-item:last-child { border-bottom: none; }
-.service-item:active { background: var(--black3); }
-.service-item::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 2px;
-  background: var(--gold);
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-.service-item:active::before { opacity: 1; }
-
-.svc-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 13px;
-  letter-spacing: 1px;
-  color: var(--gold);
-  width: 24px;
-  flex-shrink: 0;
-  opacity: 0.6;
-}
-.svc-body { flex: 1; min-width: 0; }
-.svc-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
-  letter-spacing: 2px;
-  color: var(--white);
-  margin-bottom: 2px;
-}
-.svc-desc {
-  font-size: 11px;
-  font-weight: 300;
-  color: var(--muted);
-  line-height: 1.5;
-  letter-spacing: 0.2px;
-}
-.svc-meta { text-align: right; flex-shrink: 0; }
-.svc-price {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  letter-spacing: 1px;
-  color: var(--gold);
-  display: block;
-  line-height: 1;
-}
-.svc-time {
-  font-family: 'DM Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 1px;
-  color: var(--muted);
-  display: block;
-  margin-top: 3px;
-}
-
-/* ─── BOOKING ─── */
-.booking {
-  padding: 64px 24px;
-  background: var(--black);
-}
-.booking .section-title .outline { -webkit-text-stroke: 1.5px rgba(200,200,200,0.3); }
-
-.booking-features {
-  list-style: none;
-  margin-bottom: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.booking-features li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 12px;
-  font-weight: 300;
-  color: rgba(240,237,232,0.45);
-  letter-spacing: 0.3px;
-  line-height: 1.5;
-}
-.booking-features li::before {
-  content: '—';
-  color: var(--gold);
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  flex-shrink: 0;
-}
-
-/* Cal widget */
-.cal-widget {
-  background: var(--black2);
-  border: 1px solid var(--border);
-  overflow: hidden;
-}
-.cal-top {
-  background: var(--black3);
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.cal-top-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 16px;
-  letter-spacing: 3px;
-  color: var(--white);
-}
-.cal-top-badge {
-  font-family: 'DM Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--gold);
-  border: 1px solid rgba(184,153,106,0.3);
-  padding: 3px 8px;
-}
-.cal-body { padding: 16px; }
-.cal-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
-}
-.cal-month-label {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px;
-  letter-spacing: 2px;
-  color: var(--white);
-}
-.cal-btn {
-  width: 30px; height: 30px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
-  -webkit-tap-highlight-color: transparent;
-  transition: all 0.15s;
-}
-.cal-btn:active { background: var(--gold); border-color: var(--gold); color: var(--black); }
-.cal-days-head {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
-  margin-bottom: 6px;
-}
-.cal-day-lbl {
-  font-family: 'DM Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: rgba(102,102,102,0.6);
-  text-align: center;
-  padding: 3px 0;
-}
-.cal-days-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 3px;
-}
-.cal-day {
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-family: 'DM Mono', monospace;
-  color: rgba(240,237,232,0.25);
-  cursor: pointer;
-  border: 1px solid transparent;
-  -webkit-tap-highlight-color: transparent;
-  transition: all 0.15s;
-}
-.cal-day.available { color: rgba(240,237,232,0.65); }
-.cal-day.today { border-color: rgba(200,200,200,0.15); }
-.cal-day.selected { background: var(--gold); color: var(--black); }
-.cal-day.disabled { color: rgba(240,237,232,0.1); pointer-events: none; }
-.cal-day.empty { pointer-events: none; }
-.cal-day.available:active { background: rgba(184,153,106,0.25); border-color: var(--gold); color: var(--white); }
-
-.cal-times-section { margin-top: 14px; border-top: 1px solid var(--border); padding-top: 14px; }
-.cal-times-lbl {
-  font-family: 'DM Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 10px;
-}
-.times-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-}
-.time-slot {
-  padding: 10px 4px;
-  text-align: center;
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  color: rgba(240,237,232,0.45);
-  border: 1px solid var(--border);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: all 0.15s;
-}
-.time-slot.selected { background: var(--gold); color: var(--black); border-color: var(--gold); }
-.time-slot.taken { color: rgba(240,237,232,0.1); pointer-events: none; text-decoration: line-through; }
-.time-slot:not(.taken):active { background: rgba(184,153,106,0.2); border-color: var(--gold); color: var(--white); }
-
-.cal-confirm {
-  width: 100%;
-  margin-top: 14px;
-  padding: 15px;
-  background: var(--gold);
-  color: var(--black);
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.2s;
-}
-.cal-confirm:active { background: var(--gold2); }
-
-/* Nota especial — funcionalidad pedida por el cliente */
-.booking-note {
-  margin-top: 14px;
-  padding: 12px 14px;
-  border: 1px solid rgba(184,153,106,0.2);
-  background: rgba(184,153,106,0.05);
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-.booking-note-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
-.booking-note-text {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 1px;
-  color: rgba(184,153,106,0.7);
-  line-height: 1.6;
-}
-
-/* ─── GALERIA ─── */
-.galeria {
-  padding: 64px 24px;
-  background: var(--black2);
-}
-.gal-scroll {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  margin: 0 -24px;
-  padding: 0 24px;
-}
-.gal-scroll::-webkit-scrollbar { display: none; }
-.gal-card {
-  flex-shrink: 0;
-  width: 190px;
-  height: 250px;
-  position: relative;
-  overflow: hidden;
-  scroll-snap-align: start;
-  cursor: pointer;
-  border: 1px solid var(--border);
-}
-.gal-card:nth-child(1) { background: linear-gradient(160deg, #1a1a1a, #0d0d0d); }
-.gal-card:nth-child(2) { background: linear-gradient(160deg, #151515, #111111); }
-.gal-card:nth-child(3) { background: linear-gradient(160deg, #1c1c1c, #0f0f0f); }
-.gal-card:nth-child(4) { background: linear-gradient(160deg, #121212, #1a1a1a); }
-.gal-card:nth-child(5) { background: linear-gradient(160deg, #181818, #0e0e0e); }
-
-.gal-icon {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 58px;
-  opacity: 0.06;
-}
-/* Logo watermark en cada card */
-.gal-logo-mark {
-  position: absolute;
-  top: 16px; right: 16px;
-  width: 28px; height: 28px;
-  opacity: 0.15;
-}
-.gal-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(184,153,106,0.88);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-.gal-card:active .gal-card-overlay { opacity: 1; }
-.gal-card-overlay span {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 16px;
-  letter-spacing: 3px;
-  color: var(--black);
-}
-.gal-label {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 28px 14px 14px;
-  background: linear-gradient(transparent, rgba(0,0,0,0.8));
-}
-.gal-label-text {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(240,237,232,0.45);
-}
-.gal-hint {
-  font-family: 'DM Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-/* ─── NOSOTROS ─── */
-.nosotros {
-  padding: 64px 24px;
-  background: var(--black);
-  position: relative;
-  overflow: hidden;
-}
-/* Giant BKN behind */
-.nosotros-bg-text {
-  position: absolute;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 180px;
-  letter-spacing: 10px;
-  color: rgba(240,237,232,0.02);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  white-space: nowrap;
-}
-.nosotros-desc {
-  font-size: 13px;
-  font-weight: 300;
-  line-height: 1.9;
-  color: rgba(240,237,232,0.4);
-  margin-bottom: 28px;
-  letter-spacing: 0.3px;
-  position: relative;
-  z-index: 1;
-}
-.tags-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 32px;
-  position: relative;
-  z-index: 1;
-}
-.tag {
-  padding: 6px 14px;
-  border: 1px solid rgba(184,153,106,0.25);
-  font-family: 'DM Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(184,153,106,0.6);
-}
-.barber-card {
-  background: var(--black2);
-  border: 1px solid var(--border);
-  border-left: 2px solid var(--gold);
-  padding: 24px;
-  position: relative;
-  z-index: 1;
-}
-.barber-quote {
-  font-size: 14px;
-  font-weight: 300;
-  font-style: italic;
-  line-height: 1.85;
-  color: rgba(240,237,232,0.55);
-  margin-bottom: 20px;
-  letter-spacing: 0.2px;
-}
-.barber-sig { display: flex; align-items: center; gap: 12px; }
-.barber-logo {
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  background: var(--black3);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-.barber-logo img { width: 28px; height: 28px; object-fit: contain; }
-.barber-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px;
-  letter-spacing: 3px;
-  color: var(--white);
-}
-.barber-title {
-  font-family: 'DM Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 1px;
-  color: var(--muted);
-}
-
-/* ─── CONTACTO ─── */
-.contacto {
-  padding: 64px 24px;
-  background: var(--black2);
-}
-.contact-list { margin-top: 4px; }
-.contact-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--border);
-}
-.contact-item:last-child { border-bottom: none; }
-.contact-icon {
-  width: 38px; height: 38px;
-  background: var(--black3);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-.contact-lbl {
-  font-family: 'DM Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 3px;
-}
-.contact-val {
-  font-size: 13px;
-  font-weight: 300;
-  color: rgba(240,237,232,0.7);
-  letter-spacing: 0.3px;
-}
-.wa-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 16px;
-  background: #1A1A1A;
-  color: #25D366;
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  text-decoration: none;
-  border: 1px solid rgba(37,211,102,0.2);
-  margin-top: 24px;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.2s;
-}
-.wa-btn:active { background: rgba(37,211,102,0.1); }
-
-/* ─── FOOTER ─── */
-footer {
-  background: var(--black);
-  border-top: 1px solid var(--border);
-  padding: 32px 24px;
-  padding-bottom: calc(32px + var(--safe-b));
-  text-align: center;
-}
-.footer-logo-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 6px;
-}
-.footer-logo-wrap img { width: 28px; height: 28px; object-fit: contain; opacity: 0.7; }
-.footer-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
-  letter-spacing: 6px;
-  color: var(--white);
-}
-.footer-tagline {
-  font-family: 'DM Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 20px;
-}
-.footer-links {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  list-style: none;
-  margin-bottom: 20px;
-}
-.footer-links a {
-  font-family: 'DM Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  text-decoration: none;
-}
-.footer-copy {
-  font-family: 'DM Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 1px;
-  color: rgba(102,102,102,0.4);
-}
-
-/* ─── STICKY BTN ─── */
-.sticky-book {
-  position: fixed;
-  bottom: calc(16px + var(--safe-b));
-  left: 20px; right: 20px;
-  z-index: 990;
-  background: var(--gold);
-  color: var(--black);
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  padding: 16px;
-  border: none;
-  text-align: center;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 8px 32px rgba(184,153,106,0.25);
-  transition: opacity 0.3s, transform 0.3s;
-  font-weight: 500;
-  -webkit-tap-highlight-color: transparent;
-}
-.sticky-book.hidden { opacity: 0; transform: translateY(12px); pointer-events: none; }
-.sticky-book:active { background: var(--gold2); }
-
-/* ─── REVEAL ─── */
-.reveal { opacity:0; transform:translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
-.reveal.visible { opacity:1; transform:none; }
-
-/* ─── DESKTOP ─── */
-@media (min-width: 768px) {
-  nav { padding: 0 60px; }
-  .ticker-wrap { margin-top: 90px; }
-  .hero { padding: 80px 60px; min-height: auto; padding-top: calc(90px + 80px); }
-  .servicios, .booking, .galeria, .nosotros, .contacto { padding: 80px 60px; }
-  .services-list { display: grid; grid-template-columns: 1fr 1fr; }
-  .service-item { border-right: 1px solid var(--border); }
-  .service-item:nth-child(even) { border-right: none; }
-  .booking { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
-  .gal-scroll { margin: 0; padding: 0; flex-wrap: wrap; overflow-x: visible; }
-  .gal-card { width: calc(20% - 8px); height: 270px; }
-  .nosotros { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-  .contacto { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
-  .sticky-book { display: none; }
-  h1 { font-size: clamp(100px, 10vw, 140px); }
-}
+  html,body{margin:0;padding:0;background:#0A0A0A;}
+  *{box-sizing:border-box;}
+  ::selection{background:#B8996A;color:#0A0A0A;}
+  .bkn-scroll::-webkit-scrollbar{display:none;}
+  @keyframes bknLine{0%{transform-origin:left;transform:scaleX(0)}100%{transform-origin:left;transform:scaleX(1)}}
+  @keyframes bknFadeIn{0%{opacity:0}100%{opacity:1}}
+  body{font-family:'Montserrat',sans-serif;background:#0A0A0A;color:#F0EDE8;overflow-x:hidden;}
 </style>
 </head>
 <body>
 
-<!-- LOGO BASE64 oculto para reusar -->
-<img id="logo-src" src="data:image/jpeg;base64,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" style="display:none">
-
-<script>
-  // Inject logo wherever needed after DOM loads
-  const LOGO_B64 = "data:image/jpeg;base64,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";
-</script>
-
-<!-- DEMO BANNER -->
-<div class="demo-banner">
-  <div class="demo-text">
-    <div class="demo-dot"></div>
-    Demo · Personalizable
+<!-- INTRO LOADER -->
+<div id="bkn-loader" style="position:fixed;inset:0;z-index:2000;background:#0A0A0A;display:flex;align-items:center;justify-content:center;transition:opacity .7s ease;">
+  <div style="text-align:center;">
+    <img src="assets/bkn-logo.jpg" alt="BKN" style="width:72px;height:72px;object-fit:contain;mix-blend-mode:screen;margin:0 auto 18px;display:block;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:54px;letter-spacing:14px;color:#F0EDE8;line-height:1;padding-left:14px;">BKN</div>
+    <div style="height:2px;background:#B8996A;margin:14px auto 0;width:110px;animation:bknLine .9s cubic-bezier(.16,1,.3,1) .2s both;"></div>
+    <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:4px;color:#666;margin-top:14px;animation:bknFadeIn .8s ease .6s both;">PREMIUM BARBERSHOP</div>
   </div>
-  <div class="demo-badge">Muestra</div>
 </div>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">
-    <img src="data:image/jpeg;base64,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" alt="BKN Logo">
-    <span class="nav-logo-text">BKN</span>
+<!-- TOP BAR -->
+<nav style="position:fixed;top:0;left:0;right:0;z-index:800;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(10,10,10,0.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,200,200,0.08);">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <img src="assets/bkn-logo.jpg" alt="BKN" style="width:34px;height:34px;object-fit:contain;mix-blend-mode:screen;">
+    <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:6px;color:#F0EDE8;padding-left:3px;">BKN</span>
   </div>
-  <a href="#turnos" class="nav-cta">Reservar</a>
+  <a href="agendar.html" style="background:#B8996A;color:#0A0A0A;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:9px 16px;text-decoration:none;font-weight:500;">Reservar</a>
 </nav>
 
-<!-- TICKER -->
-<div class="ticker-wrap">
-  <div class="ticker-inner">
-    &nbsp;— PRECISION CUTS &nbsp;— BEARD STYLING &nbsp;— FADES &nbsp;— ENCARNACIÓN, PARAGUAY &nbsp;— RESERVÁ TU TURNO &nbsp;— PREMIUM BARBERSHOP &nbsp;— PRECISION CUTS &nbsp;— BEARD STYLING &nbsp;— FADES &nbsp;— ASUNCIÓN, PARAGUAY &nbsp;— RESERVÁ TU TURNO &nbsp;— PREMIUM BARBERSHOP &nbsp;
-  </div>
-</div>
-
 <!-- HERO -->
-<section class="hero" id="inicio">
-  <div class="hero-accent"></div>
-  <div class="hero-overline">Premium Barbershop · Encarnación</div>
-  <h1>PRECI<br><span class="outline">SION</span><br><span class="gold">CUT.</span></h1>
-  <p class="hero-sub">Your style. Your identity.</p>
-  <p class="hero-desc">Dos barberos, un estándar: la excelencia. Reservá tu turno y viví la experiencia BKN.</p>
-  <div class="hero-btns">
-    <a href="#turnos" class="btn-gold">Reservar Turno</a>
-    <a href="#servicios" class="btn-outline">Ver Servicios</a>
+<section style="position:relative;overflow:hidden;padding:106px 16px 40px;min-height:84vh;display:flex;flex-direction:column;justify-content:center;background:#0A0A0A;">
+  <div style="position:absolute;top:60px;left:0;right:0;height:1px;background:rgba(200,200,200,0.22);"></div>
+  <div data-reveal style="position:relative;z-index:1;">
+    <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:36px;">
+      <img src="assets/bkn-logo.jpg" alt="BKN" style="width:58px;height:58px;object-fit:contain;mix-blend-mode:screen;opacity:.95;">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:5px;color:#C9A86F;margin-top:14px;">PREMIUM BARBERSHOP · ENCARNACIÓN</div>
+      <div style="width:1px;height:26px;background:linear-gradient(#C9A86F,transparent);margin-top:14px;"></div>
+    </div>
+    <h1 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(96px,28vw,204px);line-height:.78;letter-spacing:0;color:#F0EDE8;margin:0 0 0 -4px;">BARBER<br>SHOP<span style="color:#B8996A;">.</span></h1>
+    <div style="height:1px;background:rgba(200,200,200,0.16);margin:26px 0 22px;"></div>
+    <div style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:flex-start;">
+      <p style="font-size:12px;font-weight:300;color:rgba(240,237,232,0.5);max-width:280px;margin:0;line-height:1.85;letter-spacing:.2px;">Cortes de precisión. Barba a navaja. Sistema de reservas sin filas ni esperas.</p>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;color:#C8C8C8;line-height:1.9;text-align:right;">[01] CORTES<br>[02] BARBA<br>[03] AFEITADO<br>[04] DISEÑO</div>
+    </div>
+    <div style="display:flex;margin-top:32px;border:1px solid rgba(200,200,200,0.25);">
+      <a href="agendar.html" style="flex:1;padding:17px;background:#B8996A;color:#0A0A0A;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;font-weight:500;text-align:center;">Reservar →</a>
+      <a href="#bkn-servicios" style="flex:1;padding:17px;background:transparent;color:#C8C8C8;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;border-left:1px solid rgba(200,200,200,0.25);text-decoration:none;text-align:center;">Servicios</a>
+    </div>
   </div>
-  <div class="hero-stats">
-    <div class="hero-stat">
-      <span class="hero-stat-num">500+</span>
-      <span class="hero-stat-lbl">Clientes</span>
+</section>
+
+<!-- STATS STRIP -->
+<section style="padding:0 24px 8px;background:#0A0A0A;">
+  <div data-reveal style="display:flex;border:1px solid rgba(200,200,200,0.1);">
+    <div style="flex:1;padding:18px 12px;text-align:center;border-right:1px solid rgba(200,200,200,0.1);">
+      <span data-count="500" data-suffix="+" style="font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;color:#B8996A;display:block;line-height:1;">0</span>
+      <span style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#666;display:block;margin-top:5px;">Clientes</span>
     </div>
-    <div class="hero-stat">
-      <span class="hero-stat-num">2</span>
-      <span class="hero-stat-lbl">Barberos</span>
+    <div style="flex:1;padding:18px 12px;text-align:center;border-right:1px solid rgba(200,200,200,0.1);">
+      <span data-count="2" data-suffix="" style="font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;color:#B8996A;display:block;line-height:1;">0</span>
+      <span style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#666;display:block;margin-top:5px;">Barberos</span>
     </div>
-    <div class="hero-stat">
-      <span class="hero-stat-num">100%</span>
-      <span class="hero-stat-lbl">Precisión</span>
+    <div style="flex:1;padding:18px 12px;text-align:center;">
+      <span data-count="100" data-suffix="%" style="font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;color:#B8996A;display:block;line-height:1;">0</span>
+      <span style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#666;display:block;margin-top:5px;">Precisión</span>
     </div>
   </div>
 </section>
 
 <!-- SERVICIOS -->
-<section class="servicios reveal" id="servicios">
-  <div class="section-overline">Lo que hacemos</div>
-  <div class="section-title">SERVI<span class="outline">CIOS</span></div>
-  <div class="services-list">
-    <div class="service-item">
-      <div class="svc-num">01</div>
-      <div class="svc-body">
-        <div class="svc-name">Corte Clásico</div>
-        <div class="svc-desc">Tijera y máquina. Lavado y peinado incluido.</div>
-      </div>
-      <div class="svc-meta">
-        <span class="svc-price">60K</span>
-        <span class="svc-time">30 min</span>
-      </div>
-    </div>
-    <div class="service-item">
-      <div class="svc-num">02</div>
-      <div class="svc-body">
-        <div class="svc-name">Perfilado Barba</div>
-        <div class="svc-desc">Diseño y perfilado con navaja. Hidratación.</div>
-      </div>
-      <div class="svc-meta">
-        <span class="svc-price">40K</span>
-        <span class="svc-time">25 min</span>
-      </div>
-    </div>
-    <div class="service-item">
-      <div class="svc-num">03</div>
-      <div class="svc-body">
-        <div class="svc-name">Combo Completo</div>
-        <div class="svc-desc">Corte + barba + tratamiento. Todo incluido.</div>
-      </div>
-      <div class="svc-meta">
-        <span class="svc-price">90K</span>
-        <span class="svc-time">55 min</span>
-      </div>
-    </div>
-    <div class="service-item">
-      <div class="svc-num">04</div>
-      <div class="svc-body">
-        <div class="svc-name">Afeitado Clásico</div>
-        <div class="svc-desc">Navaja de filo, toalla caliente y post-balm.</div>
-      </div>
-      <div class="svc-meta">
-        <span class="svc-price">50K</span>
-        <span class="svc-time">35 min</span>
-      </div>
-    </div>
+<section id="bkn-servicios" style="padding:56px 24px 72px;background:#111111;">
+  <div data-reveal style="margin-bottom:36px;">
+    <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#B8996A;margin-bottom:10px;display:flex;align-items:center;gap:10px;"><span style="width:22px;height:1px;background:#B8996A;display:inline-block;"></span>Lo que hacemos</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,12vw,72px);letter-spacing:2px;line-height:.9;color:#F0EDE8;">SERVI<span style="-webkit-text-stroke:1.5px #C8C8C8;color:transparent;">CIOS</span></div>
   </div>
+  <div data-reveal id="services-list" style="border:1px solid rgba(200,200,200,0.08);"></div>
 </section>
 
-<!-- BOOKING -->
-<section class="booking reveal" id="turnos">
-  <div class="booking-left">
-    <div class="section-overline">Sin filas</div>
-    <div class="section-title">AGENDÁ<br>TU <span class="outline">TURNO</span></div>
-    <ul class="booking-features">
-      <li>Elegís el barbero y el horario</li>
-      <li>Dejás tu número de WhatsApp al reservar</li>
-      <li>Confirmación instantánea</li>
-      <li>Si hay cambios, te avisamos y podés reprogramar</li>
-    </ul>
-  </div>
-  <div>
-    <div class="cal-widget">
-      <div class="cal-top">
-        <div class="cal-top-title">Reservar Turno</div>
-        <div class="cal-top-badge">30 min</div>
-      </div>
-      <div class="cal-body">
-        <div class="cal-nav">
-          <button class="cal-btn" onclick="prevMonth()">‹</button>
-          <span class="cal-month-label" id="cal-month-label">Febrero 2026</span>
-          <button class="cal-btn" onclick="nextMonth()">›</button>
+<!-- BOOKING CTA -->
+<section id="bkn-turnos" style="padding:72px 24px;background:#0A0A0A;">
+  <div data-reveal style="max-width:780px;margin:0 auto;border:1px solid rgba(200,200,200,0.12);background:linear-gradient(160deg,#151515,#0b0b0b);padding:clamp(34px,7vw,58px) clamp(24px,6vw,52px);position:relative;overflow:hidden;">
+    <div style="position:absolute;top:50%;right:-3%;transform:translateY(-50%);font-family:'Bebas Neue',sans-serif;font-size:clamp(180px,40vw,300px);line-height:.8;letter-spacing:6px;color:rgba(184,153,106,0.035);pointer-events:none;white-space:nowrap;">BKN</div>
+    <div style="position:relative;z-index:1;">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#B8996A;margin-bottom:14px;display:flex;align-items:center;gap:10px;"><span style="width:22px;height:1px;background:#B8996A;display:inline-block;"></span>Reserva online · sin filas</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,13vw,92px);letter-spacing:2px;line-height:.88;color:#F0EDE8;margin-bottom:18px;">AGENDÁ<br>TU <span style="-webkit-text-stroke:1.5px #C8C8C8;color:transparent;">TURNO</span></div>
+      <p style="font-size:13px;font-weight:300;color:rgba(240,237,232,0.5);line-height:1.8;max-width:430px;margin:0 0 30px;letter-spacing:.2px;">Elegís tu barbero, mirás su agenda en tiempo real y reservás el servicio que querés. Te confirmamos por WhatsApp.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:34px;">
+        <div style="flex:1;min-width:130px;border-top:1px solid rgba(200,200,200,0.14);padding-top:13px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;color:#B8996A;line-height:1;">01</div>
+          <div style="font-size:12px;font-weight:400;color:rgba(240,237,232,0.72);margin-top:5px;">Elegí tu barbero</div>
         </div>
-        <div class="cal-days-head">
-          <div class="cal-day-lbl">Do</div><div class="cal-day-lbl">Lu</div><div class="cal-day-lbl">Ma</div>
-          <div class="cal-day-lbl">Mi</div><div class="cal-day-lbl">Ju</div><div class="cal-day-lbl">Vi</div><div class="cal-day-lbl">Sá</div>
+        <div style="flex:1;min-width:130px;border-top:1px solid rgba(200,200,200,0.14);padding-top:13px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;color:#B8996A;line-height:1;">02</div>
+          <div style="font-size:12px;font-weight:400;color:rgba(240,237,232,0.72);margin-top:5px;">Fecha y hora libre</div>
         </div>
-        <div class="cal-days-grid" id="cal-days"></div>
-        <div class="cal-times-section">
-          <div class="cal-times-lbl">Horarios disponibles</div>
-          <div class="times-grid">
-            <div class="time-slot" onclick="selectTime(this)">09:00</div>
-            <div class="time-slot" onclick="selectTime(this)">09:30</div>
-            <div class="time-slot taken">10:00</div>
-            <div class="time-slot" onclick="selectTime(this)">10:30</div>
-            <div class="time-slot" onclick="selectTime(this)">11:00</div>
-            <div class="time-slot taken">11:30</div>
-            <div class="time-slot" onclick="selectTime(this)">14:00</div>
-            <div class="time-slot" onclick="selectTime(this)">14:30</div>
-          </div>
-        </div>
-        <button class="cal-confirm" onclick="showConfirm()">Confirmar Turno →</button>
-        <div class="booking-note">
-          <div class="booking-note-icon">📱</div>
-          <div class="booking-note-text">Al confirmar dejás tu número de WhatsApp. Si necesitamos reprogramar, te contactamos al instante con un link para elegir nueva fecha.</div>
+        <div style="flex:1;min-width:130px;border-top:1px solid rgba(200,200,200,0.14);padding-top:13px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;color:#B8996A;line-height:1;">03</div>
+          <div style="font-size:12px;font-weight:400;color:rgba(240,237,232,0.72);margin-top:5px;">Tu servicio</div>
         </div>
       </div>
+      <a href="agendar.html" style="display:inline-flex;align-items:center;gap:12px;padding:18px 40px;background:#B8996A;color:#0A0A0A;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;font-weight:500;">Reservar cita →</a>
     </div>
   </div>
 </section>
 
 <!-- GALERIA -->
-<section class="galeria reveal" id="galeria">
-  <div class="section-overline">Nuestro trabajo</div>
-  <div class="section-title">GALE<span class="outline">RÍA</span></div>
-  <div class="gal-scroll">
-    <div class="gal-card">
-      <div class="gal-icon">✂</div>
-      <div class="gal-card-overlay"><span>Fade Clásico</span></div>
-      <div class="gal-label"><div class="gal-label-text">Fade Clásico</div></div>
+<section style="padding:72px 0;background:#111111;overflow:hidden;">
+  <div data-reveal style="padding:0 24px;margin-bottom:32px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;">
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#B8996A;margin-bottom:10px;display:flex;align-items:center;gap:10px;"><span style="width:22px;height:1px;background:#B8996A;display:inline-block;"></span>Nuestro trabajo</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,12vw,72px);letter-spacing:2px;line-height:.9;color:#F0EDE8;">GALE<span style="-webkit-text-stroke:1.5px #C8C8C8;color:transparent;">RÍA</span></div>
     </div>
-    <div class="gal-card">
-      <div class="gal-icon">💈</div>
-      <div class="gal-card-overlay"><span>Combo</span></div>
-      <div class="gal-label"><div class="gal-label-text">Corte + Barba</div></div>
-    </div>
-    <div class="gal-card">
-      <div class="gal-icon">🪒</div>
-      <div class="gal-card-overlay"><span>Afeitado</span></div>
-      <div class="gal-label"><div class="gal-label-text">Afeitado Clásico</div></div>
-    </div>
-    <div class="gal-card">
-      <div class="gal-icon">✂</div>
-      <div class="gal-card-overlay"><span>Degradé</span></div>
-      <div class="gal-label"><div class="gal-label-text">Degradé</div></div>
-    </div>
-    <div class="gal-card">
-      <div class="gal-icon">👑</div>
-      <div class="gal-card-overlay"><span>Peinado</span></div>
-      <div class="gal-label"><div class="gal-label-text">Peinado</div></div>
+    <div style="display:flex;gap:8px;flex-shrink:0;">
+      <button id="gal-prev" style="width:40px;height:40px;border:1px solid rgba(200,200,200,0.16);background:transparent;color:#C8C8C8;cursor:pointer;font-size:15px;transition:all .15s;">‹</button>
+      <button id="gal-next" style="width:40px;height:40px;border:1px solid rgba(200,200,200,0.16);background:transparent;color:#C8C8C8;cursor:pointer;font-size:15px;transition:all .15s;">›</button>
     </div>
   </div>
-  <div class="gal-hint">← Deslizá →</div>
+  <div id="bkn-gallery" class="bkn-scroll" style="display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0 24px;-webkit-overflow-scrolling:touch;"></div>
+  <div style="padding:0 24px;margin-top:18px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#555;">← Deslizá · 6 trabajos</div>
 </section>
 
 <!-- NOSOTROS -->
-<section class="nosotros reveal" id="nosotros">
-  <div class="nosotros-bg-text">BKN</div>
-  <div class="nosotros-left" style="position:relative;z-index:1;">
-    <div class="section-overline">Quiénes somos</div>
-    <div class="section-title">ARTE<br>Y <span class="outline">PRECI</span><br>SIÓN.</div>
-    <p class="nosotros-desc">Dos barberos, un estándar. BKN nació con la convicción de que cada corte es una obra. Técnica moderna, respeto por el oficio tradicional, y la agenda siempre organizada para que tu tiempo valga.</p>
-    <div class="tags-row">
-      <span class="tag">Fade & Degradé</span>
-      <span class="tag">Barba Clásica</span>
-      <span class="tag">Diseño Personalizado</span>
-      <span class="tag">Navaja Tradicional</span>
-      <span class="tag">2 Barberos</span>
+<section style="padding:72px 24px;background:#0A0A0A;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Bebas Neue',sans-serif;font-size:200px;letter-spacing:14px;color:rgba(240,237,232,0.018);pointer-events:none;white-space:nowrap;">BKN</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;align-items:center;position:relative;z-index:1;">
+    <div data-reveal>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#B8996A;margin-bottom:10px;display:flex;align-items:center;gap:10px;"><span style="width:22px;height:1px;background:#B8996A;display:inline-block;"></span>Quiénes somos</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,12vw,72px);letter-spacing:2px;line-height:.88;color:#F0EDE8;margin-bottom:26px;">ARTE Y <span style="-webkit-text-stroke:1.5px #C8C8C8;color:transparent;">PRECI</span>SIÓN</div>
+      <p style="font-size:13px;font-weight:300;line-height:1.9;color:rgba(240,237,232,0.42);margin-bottom:26px;letter-spacing:.3px;max-width:420px;">Dos barberos, un estándar. BKN nació con la convicción de que cada corte es una obra. Técnica moderna, respeto por el oficio tradicional, y la agenda siempre organizada para que tu tiempo valga.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="padding:7px 14px;border:1px solid rgba(184,153,106,0.25);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(184,153,106,0.65);">Fade & Degradé</span>
+        <span style="padding:7px 14px;border:1px solid rgba(184,153,106,0.25);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(184,153,106,0.65);">Barba Clásica</span>
+        <span style="padding:7px 14px;border:1px solid rgba(184,153,106,0.25);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(184,153,106,0.65);">Navaja Tradicional</span>
+        <span style="padding:7px 14px;border:1px solid rgba(184,153,106,0.25);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(184,153,106,0.65);">2 Barberos</span>
+      </div>
     </div>
-  </div>
-  <div class="nosotros-right" style="position:relative;z-index:1;">
-    <div class="barber-card">
-      <p class="barber-quote">"En BKN no hacemos cortes en serie. Cada cliente tiene su estilo y nos tomamos el tiempo para encontrarlo. Por eso la gente vuelve."</p>
-      <div class="barber-sig">
-        <div class="barber-logo">
-          <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/wAARCAC4AK0DASIAAhEBAxEB/8QAHQAAAQQDAQEAAAAAAAAAAAAAAAIDBAcBBQYICf/EAEQQAAEDAwIDBgIGBggGAwAAAAECAwQABREGBxIhMQgTQVFhcSKBFDJCUpGhFiNigrHBCRUXV3KVstIkMzRj0eFDRVP/xAAZAQEBAQEBAQAAAAAAAAAAAAAAAgEDBAX/xAAcEQEBAQEBAQEBAQAAAAAAAAAAARECEgMEMSH/2gAMAwEAAhEDEQA/AKASKVw+lYTTg6VaCOGsFNOVg0DZTSSmnDSSaBsikkUomkk0GKwawTWCaDJpJrBNYJoQGkmsk0k0axRRRRgoooo0UUUUBRRRQbFFOjpTKacSarGFVhRozSSaYME02o0omkGmDCqbJpSqaecbaQVurShI8ScVmAKqxmtNN1BGbJTHQp4+fQVqpF7nun4VpaHkkf8Amp1uOtJrHEPOuHclyln45Dp/eNendjOzk7rPY296lufetXm4N8Vh4lEcAbOeIjxCyOH0HPxppimSaxXHTUXC3Tn4UkyI8hhxTbraiQpCgcEEeeaUzdp7RH68rHkoZppjr6K0UXUCSQJLOP2kH+VbeNJYko4mXUrH5j5Vutw9RRRRgooooCiiignppdYCeVKCatjGawaXwnyoKaBo0kinSK5nUl77sqiQ1/H0W4PD0HrS3GSVIvF6Zh5aaw6/5eCfeuWmTJEtzjfcKvIeA+VMEknJOTWK5W6uQUUVlIKlBKQSScACsasHs+bcy9zdzLfp9tCxBQrv7g8kf8thJ+L5nkkeqq+ptqgRLZbY1ugsoYixmktNNoGAhKRgAfIVSvY22tG3u2jdwuLARfb0lMiVkfE03jLbXpgHJHmT5V3G5G7u323zKjqTUUVmSBlMRo96+r9xOSPc4HrQeSe3ztWbFqhrcK0RsW67L7ueEDk1JxyV++Afmk+deWQCelett5+1tY9WWOXpu2aBbuFskgBxV3eI4sHI+BogjmAchdUQN1dRt/qbHaNNWdvolEKyMKVjy43ErWfmqg4AgjqMUppxxpYW2tSVDoQatq16j3au7I73RbOoIh+sh7SzS0qH+NDQUPcKBrUap09Z7zYLhfbBan7DdLQpIvNjdUpQaSo8IeZK/jCQrAUlWSklPMg8g5m2XwKIamYB8HB0+dbxJCgCDkHoRXB1tLLdVxFhl4lTBPzT/wCq2VljqaKEKC0BSSCkjIIpWKphNFKxWMUY3CG6cS1T7TeakoazVa3ELuT5UlTNbQMelRLq61Bguy3uSG05Pr6Vuscnq66fQWforCv+IcHMj7CfP3rhzzOTT8+U7NmOyXjlbisn09KYrlbqoKKKKxoq3+zXpewuaj/TrXkhuDpOwqD61vJOJcgc22UDqs5+IgZ5Dn1rlNC6Xt71te1Zqt12NpyG5wcDZw9PexkMNZ/FSuiRz64B1+ttW3HVcxhtTTcO3RR3VvtsYYZjI8kjxUfFRyVHmTQXlvb2stVanW/adDpc07ZzlHfggy3k/wCIcm/ZPP1qptvdsdw90Lmpyx2mZODjmX58lRS0kk8ypxXU+gyfSvQnZh7LTU+JG1huWwtMdYDsS0klPEOoW94gePCPn5VdWn+0BtPF3BRtpalKh9y6Ikd9mOlEIu9O7SQeXPlnGCfGgrTbbsXWWIlqVry/v3F4c1Q4A7pn2Kz8Sh7BNTu03tarbfbJq+7SQIlkRbl4uJZiIdkraVgBwPLCnBwnrgjkrPhXqocxmo11gxbnbZNvnMIfiyWlNOtrGUrSoYIPyoPkqrVOttQ3JiK9qS+T5Mh1LbaFzXFlSicAAZ86s+VLEjeTVkMSDKajaYkwJj5Vxd8tiGEqWT4/rEA59qmbhaFibD6xvN1kSmZM4uLTpePxBS0JUP8AqXB4d2DwpB6r59E1yu3lgvydrtWaug2ybcZVxxaWO4aLqkoUQ5IdUBkgYShOfHjPlQVTRS3m3GXFNutqbWk4KVDBB9qRQbvTdx7pwRHlfAo/AT4HyrpsVXw5HIrtLBN+mwQVnLqPhX6+tVKmxNxWMU4RScVrHTsipjSR6VCZNTG1V3nypp8IGK4PdS4cKWLY2rmr9Y57eA/jXeBWBVN6wmGbqOY7nKUuFCfZPL+VT9efMOf9rUUUUV51itxoqwydT6pt9iiqCFy3ghTh6No6rWfRKQVH0Faeu+2dUYqNW3dvk9B07KLR8QXSlgkfuuqoIG6Go495vDVttCSzp+0IMS1sf9sHm6rzWs5UT646AVfnYW2Zj6kuStwtSxO9tsB3htzDifhefHVwjxSnw/a9q8yadtUq+6ggWaEnjkzpLcdoftLUEj+NfViwwrDtZtWxFWtEW12O38TrmMZ4U5Uo+qjk+5oKp7au7f6A6F/RuyyO7v16QptKkHCo7HRbnoT9Ue5PhXkXswbZ3Xcnc2GhhTjFttrqJc+WB9QJVlKQfvKIwPmfCtFuXqm+7ubryboGnX5VylJjwIqeZQ3nhbbHy6+pJr3Po1nRXZm2VjjUExpM50d7K7vBemSSPqIHUgdB4Acz1oLsuM6Farc7NuEtmLFYRxOvPLCUISPEk9K8pb2dsK32x1+0bbw27lITlKrnJBDCT/20civ3JA9DXnbfnfTVu6tyW1JeXbrEheY9sYWeD0U4ftq9+Q8AKf2J2B1hujITMQ2bRYEn9bcpDZwrzDaeXGfwA86CutZ6ovustRyb/qKe7OuMlWVuK5ewAHIAeAHKtvo3SW4sxxFw0raL4jgOUSmAtlKT6OcgPxr2/sdthsDZb/JsVicg6p1LbkhUt6WPpBaIOMgY7tPPy5+tefu3Vo7UGm9xUXdy5XCXYLsC5ES6+paIzg+u0kE4SOhAHgceFBDt+itb69iLsmtbCh66hBEC/MusuPocA5Nyi2olxtWMcahxJPPOMiqAksuR5Dkd0YcbWUKHkQcGiO+/HdDrDzjTg6KQopI+YpBJJyTkmgxW001K+j3JKCcId+E+/hWrrKFFKwpJwQcigsSsUmK4HozTw+2gK/EUvFWh0TVSmzURo9KkIVX3OflHHTkh0NR3HVdEpKj8hVHuKK3FLPMqJJq4784U2SaR1DC/9Jqmq+f++ebJHT5CiiivA6ivaXZk2GMzYbUl0uzARdtVW5xmAF8u5ZxxNk+XEsJV7AV5/wCzJtk9ududCtjrav6phkSbk4By7pJ+pnzUcJ+ZPhX1BiR2YkVqLHaS0y0gIbQkYCUgYAFB85Ox/pKUe01brbd4S2X7MZD8hl1PNC20KSMj0UUmrd/pB9zjHhxNtbVJwt8JlXTgV0QDlts+5+I+yfOvROtbborR8u5brzrfHjXKBbnEPy0fCp1vkQhXgokpSATz54r5fa/1NcNY6yumpbo4Vyp8hTqsnPCD9VI9AMAe1BY/Z9uumNs4MjdDUrSZ11SFMadtgPxOu4wt9X3UJ5pz4knHMVXu5uvdTbi6nev2pJy5L6yQ00OTbCPBCE+A/M+Oa3+ktndcab28=" alt="BKN">
-        </div>
+    <div data-reveal style="background:#111111;border:1px solid rgba(200,200,200,0.08);border-top:2px solid #B8996A;padding:28px;">
+      <p style="font-size:14px;font-weight:300;font-style:italic;line-height:1.85;color:rgba(240,237,232,0.58);margin:0 0 22px;letter-spacing:.2px;">"En BKN no hacemos cortes en serie. Cada cliente tiene su estilo y nos tomamos el tiempo para encontrarlo. Por eso la gente vuelve."</p>
+      <div style="display:flex;align-items:center;gap:13px;">
+        <img src="assets/bkn-logo.jpg" alt="BKN" style="width:42px;height:42px;object-fit:contain;mix-blend-mode:screen;flex-shrink:0;">
         <div>
-          <div class="barber-name">BKN BARBERSHOP</div>
-          <div class="barber-title">Encarnación, Paraguay</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:#F0EDE8;">EQUIPO BKN</div>
+          <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:#666;">Encarnación, Paraguay</div>
         </div>
       </div>
     </div>
@@ -1141,108 +158,167 @@ footer {
 </section>
 
 <!-- CONTACTO -->
-<section class="contacto reveal" id="contacto">
-  <div>
-    <div class="section-overline">Encontranos</div>
-    <div class="section-title">CON<span class="outline">TAC</span><br>TO.</div>
-    <div class="contact-list">
-      <div class="contact-item">
-        <div class="contact-icon">📍</div>
-        <div>
-          <div class="contact-lbl">Dirección</div>
-          <div class="contact-val">Encarnación, Paraguay</div>
-        </div>
+<section id="contacto" style="padding:72px 24px;background:#111111;">
+  <div data-reveal style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;">
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#B8996A;margin-bottom:10px;display:flex;align-items:center;gap:10px;"><span style="width:22px;height:1px;background:#B8996A;display:inline-block;"></span>Encontranos</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,12vw,72px);letter-spacing:2px;line-height:.9;color:#F0EDE8;margin-bottom:24px;">CON<span style="-webkit-text-stroke:1.5px #C8C8C8;color:transparent;">TACTO</span></div>
+      <a href="https://wa.me/595981000000" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:17px;background:#1A1A1A;color:#25D366;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:1px solid rgba(37,211,102,0.22);">Escribinos por WhatsApp</a>
+    </div>
+    <div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid rgba(200,200,200,0.08);">
+        <div style="width:38px;height:38px;background:#1A1A1A;border:1px solid rgba(200,200,200,0.08);flex-shrink:0;display:flex;align-items:center;justify-content:center;">📍</div>
+        <div><div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#B8996A;margin-bottom:4px;">Dirección</div><div style="font-size:13px;font-weight:300;color:rgba(240,237,232,0.7);">Encarnación, Paraguay</div></div>
       </div>
-      <div class="contact-item">
-        <div class="contact-icon">🕐</div>
-        <div>
-          <div class="contact-lbl">Horarios</div>
-          <div class="contact-val">Lunes a Sábado · 9:00 – 19:00</div>
-        </div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid rgba(200,200,200,0.08);">
+        <div style="width:38px;height:38px;background:#1A1A1A;border:1px solid rgba(200,200,200,0.08);flex-shrink:0;display:flex;align-items:center;justify-content:center;">🕐</div>
+        <div><div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#B8996A;margin-bottom:4px;">Horarios</div><div style="font-size:13px;font-weight:300;color:rgba(240,237,232,0.7);">Lunes a Sábado · 9:00 – 19:00</div></div>
       </div>
-      <div class="contact-item">
-        <div class="contact-icon">📱</div>
-        <div>
-          <div class="contact-lbl">WhatsApp</div>
-          <div class="contact-val">+595 981 000 000</div>
-        </div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid rgba(200,200,200,0.08);">
+        <div style="width:38px;height:38px;background:#1A1A1A;border:1px solid rgba(200,200,200,0.08);flex-shrink:0;display:flex;align-items:center;justify-content:center;">📱</div>
+        <div><div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#B8996A;margin-bottom:4px;">WhatsApp</div><div style="font-size:13px;font-weight:300;color:rgba(240,237,232,0.7);">+595 981 000 000</div></div>
       </div>
-      <div class="contact-item">
-        <div class="contact-icon">📸</div>
-        <div>
-          <div class="contact-lbl">Instagram</div>
-          <div class="contact-val">@bkn.barbershop</div>
-        </div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:16px 0;">
+        <div style="width:38px;height:38px;background:#1A1A1A;border:1px solid rgba(200,200,200,0.08);flex-shrink:0;display:flex;align-items:center;justify-content:center;">📸</div>
+        <div><div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#B8996A;margin-bottom:4px;">Instagram</div><div style="font-size:13px;font-weight:300;color:rgba(240,237,232,0.7);">@bkn.barbershop</div></div>
       </div>
     </div>
-    <a href="https://wa.me/595981000000" class="wa-btn">💬 &nbsp;Escribinos por WhatsApp</a>
   </div>
-  <div></div>
 </section>
 
 <!-- FOOTER -->
-<footer>
-  <div class="footer-logo-wrap">
-    <img src="data:image/jpeg;base64,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" alt="BKN" style="width:20px;height:20px;object-fit:contain;opacity:0.5;">
-    <span class="footer-name">BKN</span>
-  </div>
-  <div class="footer-tagline">Premium Barbershop · Encarnación, Paraguay</div>
-  <ul class="footer-links">
-    <li><a href="#servicios">Servicios</a></li>
-    <li><a href="#turnos">Turnos</a></li>
-    <li><a href="#galeria">Galería</a></li>
-    <li><a href="#contacto">Contacto</a></li>
-  </ul>
-  <div class="footer-copy">© 2026 BKN Barbershop — Todos los derechos reservados</div>
+<footer style="background:#0A0A0A;border-top:1px solid rgba(200,200,200,0.08);padding:44px 24px;text-align:center;">
+  <img src="assets/bkn-logo.jpg" alt="BKN" style="width:52px;height:52px;object-fit:contain;mix-blend-mode:screen;margin:0 auto 14px;display:block;">
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:8px;color:#F0EDE8;margin-bottom:8px;padding-left:8px;">BKN</div>
+  <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#666;margin-bottom:8px;">Premium Barbershop · Encarnación, Paraguay</div>
+  <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:rgba(102,102,102,0.4);">© 2026 BKN Barbershop — Todos los derechos reservados</div>
 </footer>
 
-<!-- STICKY BTN -->
-<a href="#turnos" class="sticky-book hidden" id="sticky-book">✂ &nbsp;Reservar Turno</a>
-
 <script>
-// Reveal
-const observer = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+const API = window.BKN_API || '';
 
-// Sticky
-const stickyBtn = document.getElementById('sticky-book');
-const heroObs = new IntersectionObserver(e => e.forEach(x => stickyBtn.classList.toggle('hidden', x.isIntersecting)), { threshold: 0.1 });
-heroObs.observe(document.querySelector('.hero'));
-const bookObs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) stickyBtn.classList.add('hidden'); }), { threshold: 0.3 });
-bookObs.observe(document.getElementById('turnos'));
+// ── Loader ───────────────────────────────────────────────────────────────────
+const loader = document.getElementById('bkn-loader');
+setTimeout(() => { loader.style.opacity = '0'; loader.style.pointerEvents = 'none'; }, 1000);
+setTimeout(() => { loader.style.display = 'none'; }, 1750);
 
-// Calendar
-let currentDate = new Date(2026, 1, 1);
-function renderCalendar() {
-  const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  document.getElementById('cal-month-label').textContent = `${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
-  const grid = document.getElementById('cal-days');
-  grid.innerHTML = '';
-  const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
-  const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-  const today = new Date();
-  for(let i = 0; i < firstDay; i++) { const e = document.createElement('div'); e.className='cal-day empty'; grid.appendChild(e); }
-  for(let d = 1; d <= daysInMonth; d++) {
-    const el = document.createElement('div');
-    const isToday = today.getDate()===d && today.getMonth()===currentDate.getMonth() && today.getFullYear()===currentDate.getFullYear();
-    const isPast = new Date(currentDate.getFullYear(), currentDate.getMonth(), d) < new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const isSun = (firstDay + d - 1) % 7 === 0;
-    el.className = 'cal-day' + (isSun||isPast ? ' disabled' : ' available') + (isToday ? ' today' : '');
-    el.textContent = d;
-    if(!isSun && !isPast) el.addEventListener('click', () => { document.querySelectorAll('.cal-day').forEach(c=>c.classList.remove('selected')); el.classList.add('selected'); });
-    grid.appendChild(el);
+// ── Reveal on scroll ─────────────────────────────────────────────────────────
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if(e.isIntersecting){
+    e.target.style.opacity = '1';
+    e.target.style.transform = 'none';
+    io.unobserve(e.target);
   }
+}), { threshold: 0.1 });
+document.querySelectorAll('[data-reveal]').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(28px)';
+  el.style.transition = 'opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1)';
+  io.observe(el);
+});
+
+// ── Animated counters ────────────────────────────────────────────────────────
+function countUp(el){
+  const target = parseFloat(el.dataset.count);
+  const suf = el.dataset.suffix || '';
+  const dur = 1200, t0 = performance.now();
+  const step = t => {
+    const p = Math.min(1, (t - t0) / dur);
+    el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suf;
+    if(p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
 }
-function prevMonth() { currentDate.setMonth(currentDate.getMonth()-1); renderCalendar(); }
-function nextMonth() { currentDate.setMonth(currentDate.getMonth()+1); renderCalendar(); }
-function selectTime(el) { document.querySelectorAll('.time-slot').forEach(t=>t.classList.remove('selected')); el.classList.add('selected'); }
-function showConfirm() {
-  const day = document.querySelector('.cal-day.selected');
-  const time = document.querySelector('.time-slot.selected');
-  if(!day||!time) { alert('Elegí un día y horario primero ✂'); return; }
-  alert(`✂ Turno confirmado!\n\n📅 ${day.textContent} — ${time.textContent}\n\nEn la versión real te pedimos tu WhatsApp y recibís confirmación al instante.\n\n⚠️ Esto es una demo personalizada de BKN.`);
+const cio = new IntersectionObserver(es => es.forEach(e => {
+  if(e.isIntersecting){ countUp(e.target); cio.unobserve(e.target); }
+}), { threshold: 0.4 });
+document.querySelectorAll('[data-count]').forEach(el => cio.observe(el));
+
+// ── Services accordion ───────────────────────────────────────────────────────
+let SERVICES = [
+  {num:'01', name:'Corte Clásico',      desc:'Tijera y máquina. Lavado y peinado.',      price:'60K Gs', time:'60 MIN', detail:'Consulta de estilo, lavado con productos premium, corte a tijera y máquina, peinado y acabado.'},
+  {num:'02', name:'Perfilado Barba',    desc:'Diseño y perfilado con navaja.',             price:'40K Gs', time:'60 MIN', detail:'Definición de líneas con navaja, toalla caliente, aceite e hidratación.'},
+  {num:'03', name:'Combo Completo',     desc:'Corte + barba + tratamiento.',               price:'90K Gs', time:'60 MIN', detail:'La experiencia BKN completa: corte de precisión, perfilado de barba a navaja y tratamiento capilar.'},
+  {num:'04', name:'Afeitado Clásico',   desc:'Navaja, toalla caliente y bálsamo.',         price:'50K Gs', time:'60 MIN', detail:'Ritual tradicional: toalla caliente, espuma artesanal, afeitado a navaja y bálsamo post-afeitado.'},
+  {num:'05', name:'Diseño & Líneas',    desc:'Freestyle, líneas y detalles.',              price:'70K Gs', time:'60 MIN', detail:'Diseños personalizados, líneas, degradados de precisión y detalles a mano alzada.'},
+];
+let expanded = null;
+const listEl = document.getElementById('services-list');
+
+function renderServices(){
+  listEl.innerHTML = SERVICES.map((s, i) => {
+    const open = expanded === i;
+    return `<div class="svc-item" data-i="${i}" style="padding:20px;border-bottom:1px solid rgba(200,200,200,0.08);cursor:pointer;transition:background .2s;${open?'background:#171717;box-shadow:inset 2px 0 0 #B8996A;':''}">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;color:#B8996A;width:22px;flex-shrink:0;opacity:.6;">${s.num}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:2px;color:#F0EDE8;margin-bottom:3px;">${s.name}</div>
+          <div style="font-size:11px;font-weight:300;color:#666;line-height:1.5;">${s.desc}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:23px;letter-spacing:1px;color:#B8996A;display:block;line-height:1;">${s.price}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:#666;display:block;margin-top:4px;">${s.time}</span>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:18px;color:#B8996A;flex-shrink:0;transition:transform .25s;transform:rotate(${open?45:0}deg);">+</div>
+      </div>
+      <div style="overflow:hidden;transition:max-height .35s cubic-bezier(.16,1,.3,1),opacity .3s;max-height:${open?170:0}px;opacity:${open?1:0};">
+        <div style="padding-top:14px;font-size:12px;font-weight:300;line-height:1.75;color:rgba(240,237,232,0.5);border-top:1px solid rgba(200,200,200,0.08);margin-top:14px;">${s.detail}</div>
+      </div>
+    </div>`;
+  }).join('');
+  listEl.querySelectorAll('.svc-item').forEach(el => {
+    el.addEventListener('click', () => { expanded = expanded === +el.dataset.i ? null : +el.dataset.i; renderServices(); });
+  });
 }
-renderCalendar();
+renderServices();
+
+fetch(API + '/api/v1/public/services').then(r => r.json()).then(data => {
+  if(!Array.isArray(data) || !data.length) return;
+  SERVICES = data.map((s, i) => ({
+    num: String(i+1).padStart(2,'0'), name: s.name, desc: s.description || '',
+    price: parseFloat(s.price).toLocaleString('es-PY') + ' Gs', time: s.duration_minutes + ' MIN', detail: s.description || '',
+  }));
+  renderServices();
+}).catch(() => {});
+
+// ── Gallery ──────────────────────────────────────────────────────────────────
+const GALLERY = [
+  {label:'Fade Clásico', cat:'CORTE', note:'foto · fade'},
+  {label:'Corte + Barba', cat:'COMBO', note:'foto · combo'},
+  {label:'Afeitado a Navaja', cat:'RITUAL', note:'foto · afeitado'},
+  {label:'Degradé de Precisión', cat:'CORTE', note:'foto · degradé'},
+  {label:'Diseño Freestyle', cat:'DISEÑO', note:'foto · líneas'},
+  {label:'Barba Esculpida', cat:'BARBA', note:'foto · barba'},
+];
+const galEl = document.getElementById('bkn-gallery');
+function renderGallery(items){
+  galEl.innerHTML = items.map(g => `
+    <div style="flex-shrink:0;width:230px;height:300px;position:relative;overflow:hidden;scroll-snap-align:start;border:1px solid rgba(200,200,200,0.08);background:linear-gradient(155deg,#1a1a1a,#0d0d0d);">
+      ${g.image_url ? `<img src="${g.image_url}" alt="${g.label||''}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">` :
+        `<div style="position:absolute;inset:0;background-image:repeating-linear-gradient(135deg,rgba(200,200,200,0.03) 0 1px,transparent 1px 11px);"></div>
+         <img src="assets/bkn-logo.jpg" alt="" style="position:absolute;top:12px;right:12px;width:26px;height:26px;object-fit:contain;mix-blend-mode:screen;opacity:.22;">
+         <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(184,153,106,0.4);border:1px dashed rgba(184,153,106,0.2);padding:7px 11px;">${g.note||'foto'}</div>`
+      }
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:32px 16px 16px;background:linear-gradient(transparent,rgba(0,0,0,0.85));">
+        <div style="font-family:'DM Mono',monospace;font-size:7px;letter-spacing:2px;text-transform:uppercase;color:#B8996A;margin-bottom:5px;">${g.cat||''}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#F0EDE8;">${g.label||g.title||''}</div>
+      </div>
+    </div>`).join('');
+}
+renderGallery(GALLERY);
+
+fetch(API + '/api/v1/admin/gallery/public').then(r => r.json()).then(data => {
+  if(!Array.isArray(data) || !data.length) return;
+  renderGallery(data.map(g => ({ label: g.title||'', cat: '', note: 'foto', image_url: g.image_url })));
+}).catch(() => {});
+
+document.getElementById('gal-prev').addEventListener('click', () => galEl.scrollBy({ left: -246, behavior: 'smooth' }));
+document.getElementById('gal-next').addEventListener('click', () => galEl.scrollBy({ left: 246, behavior: 'smooth' }));
+['gal-prev','gal-next'].forEach(id => {
+  const btn = document.getElementById(id);
+  btn.addEventListener('mouseenter', () => { btn.style.borderColor = '#B8996A'; btn.style.color = '#B8996A'; });
+  btn.addEventListener('mouseleave', () => { btn.style.borderColor = 'rgba(200,200,200,0.16)'; btn.style.color = '#C8C8C8'; });
+});
 </script>
 </body>
 </html>
