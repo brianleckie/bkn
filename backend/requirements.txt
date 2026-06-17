@@ -11,3 +11,4 @@ python-multipart==0.0.19
 cloudinary==1.42.0
 pytz==2024.2
 httpx==0.27.2
+email-validator==2.2.0
