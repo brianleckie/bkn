@@ -15,6 +15,16 @@ const fmtDateLabel = (iso: string) => {
 const waLink = (phone: string, text: string) =>
   `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(text)}`
 
+const fmtPhone = (raw: string) => {
+  let digits = raw.replace(/\D/g, '')
+  if (digits.startsWith('595')) digits = digits.slice(3)
+  if (digits.startsWith('0')) digits = digits.slice(1)
+  const p1 = digits.slice(0, 3)
+  const p2 = digits.slice(3, 6)
+  const p3 = digits.slice(6)
+  return `+595 ${p1}${p2 ? ' ' + p2 : ''}${p3 ? ' ' + p3 : ''}`
+}
+
 interface Props {
   appt: Appointment
   token: string
@@ -27,8 +37,9 @@ export default function AppointmentModal({ appt, token, onClose, onCancelled }: 
 
   const dateLabel = fmtDateLabel(appt.start_datetime)
   const time = fmtTime(appt.start_datetime)
-  const price = appt.service_price ? parseFloat(appt.service_price).toLocaleString('es-PY') + ' Gs' : '—'
+  const price = appt.service_price ? (parseFloat(appt.service_price) / 1000).toFixed(0) + 'K' : '—'
   const phone = appt.client_phone ?? ''
+  const phoneDisplay = phone ? fmtPhone(phone) : '—'
   const waReminder = waLink(phone, `Hola ${appt.client_name}, te recordamos tu turno en BKN Barbershop: ${dateLabel} a las ${time} hs. ¡Te esperamos!`)
 
   const doCancel = async () => {
@@ -114,7 +125,7 @@ export default function AppointmentModal({ appt, token, onClose, onCancelled }: 
             {[
               ['Servicio', appt.service_name ?? '—'],
               ['Barbero', appt.barber_name ?? '—'],
-              ['WhatsApp', phone],
+              ['WhatsApp', phoneDisplay],
               ['Precio', price],
             ].map(([k, v]) => (
               <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 14px', background: '#0E0E0E' }}>

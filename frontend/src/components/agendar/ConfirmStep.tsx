@@ -6,6 +6,13 @@ const WK_SHORT = ['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB']
 const MONTHS_SHORT = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC']
 const pad = (n: number) => String(n).padStart(2, '0')
 
+const normalizePhone = (raw: string) => {
+  let digits = raw.replace(/\D/g, '')
+  if (digits.startsWith('595')) digits = digits.slice(3)
+  if (digits.startsWith('0')) digits = digits.slice(1)
+  return '+595' + digits
+}
+
 interface Props {
   barber: Barber
   selectedDate: string
@@ -36,7 +43,7 @@ export default function ConfirmStep({
 
   const d = new Date(selectedDate + 'T00:00:00')
   const dateLabel = `${WK_SHORT[d.getDay()]} ${d.getDate()} ${MONTHS_SHORT[d.getMonth()]}`
-  const price = parseFloat(service.price).toLocaleString('es-PY') + ' Gs'
+  const price = (parseFloat(service.price) / 1000).toFixed(0) + 'K'
   const phoneOk = phone.replace(/\D/g, '').length >= 8
   const nameOk = clientName.trim().length > 0
   const canSubmit = phoneOk && nameOk && !loading
@@ -64,7 +71,7 @@ export default function ConfirmStep({
         barber_id: barber.id,
         service_id: service.id,
         client_name: clientName.trim(),
-        client_phone: phone.trim(),
+        client_phone: normalizePhone(phone),
         start_datetime: startISO,
       })
       if (!res.ok) {
@@ -184,24 +191,39 @@ export default function ConfirmStep({
       >
         Tu WhatsApp
       </div>
-      <input
-        type="tel"
-        inputMode="tel"
-        value={phone}
-        onChange={e => onPhoneChange(e.target.value)}
-        placeholder="+595 9XX XXX XXX"
-        style={{
-          width: '100%',
-          padding: '15px 16px',
-          background: '#0E0E0E',
-          border: '1px solid rgba(200,200,200,0.12)',
-          color: '#F0EDE8',
-          fontFamily: '"DM Mono", monospace',
-          fontSize: 16,
-          letterSpacing: 1,
-          marginBottom: 6,
-        }}
-      />
+      <div style={{ display: 'flex', border: '1px solid rgba(200,200,200,0.12)', marginBottom: 6 }}>
+        <div
+          style={{
+            padding: '15px 12px',
+            background: '#161616',
+            borderRight: '1px solid rgba(200,200,200,0.12)',
+            fontFamily: '"DM Mono", monospace',
+            fontSize: 16,
+            color: 'rgba(240,237,232,0.45)',
+            flexShrink: 0,
+            userSelect: 'none',
+          }}
+        >
+          +595
+        </div>
+        <input
+          type="tel"
+          inputMode="tel"
+          value={phone}
+          onChange={e => onPhoneChange(e.target.value)}
+          placeholder="9XX XXX XXX"
+          style={{
+            flex: 1,
+            padding: '15px 16px',
+            background: '#0E0E0E',
+            border: 'none',
+            color: '#F0EDE8',
+            fontFamily: '"DM Mono", monospace',
+            fontSize: 16,
+            letterSpacing: 1,
+          }}
+        />
+      </div>
       <div
         style={{
           fontSize: 11,

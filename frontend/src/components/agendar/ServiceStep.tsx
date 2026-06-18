@@ -11,7 +11,7 @@ export default function ServiceStep({ services, selected, onSelect }: Props) {
     <div className="anim-bkn-fade" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       {services.map((s, i) => {
         const sel = selected === i
-        const price = parseFloat(s.price).toLocaleString('es-PY') + ' Gs'
+        const price = (parseFloat(s.price) / 1000).toFixed(0) + 'K'
         return (
           <div
             key={s.id}

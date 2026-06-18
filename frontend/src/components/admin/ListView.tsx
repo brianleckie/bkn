@@ -39,7 +39,7 @@ export default function ListView({ appts, barberFilter, onOpenModal }: Props) {
       {filtered.map(a => {
         const d = new Date(a.start_datetime)
         const dateLabel = `${WK_SHORT[d.getDay()]} ${pad(d.getDate())}`
-        const price = a.service_price ? parseFloat(a.service_price).toLocaleString('es-PY') + ' Gs' : '—'
+        const price = a.service_price ? (parseFloat(a.service_price) / 1000).toFixed(0) + 'K' : '—'
 
         return (
           <div

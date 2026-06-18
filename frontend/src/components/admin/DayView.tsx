@@ -112,7 +112,7 @@ export default function DayView({ appts, barberFilter, onOpenModal }: Props) {
                       <div style={{ textAlign: 'right' }}>
                         <div style={{ fontFamily: '"DM Mono", monospace', fontSize: 8, letterSpacing: 1, color: '#B8996A' }}>{appt.barber_name ?? ''}</div>
                         <div style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 16, letterSpacing: 1, color: '#F0EDE8' }}>
-                          {appt.service_price ? parseFloat(appt.service_price).toLocaleString('es-PY') + ' Gs' : ''}
+                          {appt.service_price ? (parseFloat(appt.service_price) / 1000).toFixed(0) + 'K' : ''}
                         </div>
                       </div>
                       <span style={{ fontFamily: '"DM Mono", monospace', fontSize: 15, color: 'rgba(184,153,106,0.55)' }}>›</span>
