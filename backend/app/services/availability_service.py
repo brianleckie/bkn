@@ -59,12 +59,13 @@ async def get_available_slots(
         )
     )
     schedule = result.scalar_one_or_none()
+    print(f"DEBUG schedule for barber {barber_id} weekday {weekday}: {schedule}")
     if not schedule or not schedule.is_working:
         return []
 
     # Build naive local datetimes for the working window
-    day_start = datetime.combine(local_date, schedule.start_time).replace(tzinfo=shop_tz)
-    day_end = datetime.combine(local_date, schedule.end_time).replace(tzinfo=shop_tz)
+    day_start = datetime.combine(local_date, schedule.start_time, tzinfo=ZoneInfo(tz_str))
+    day_end = datetime.combine(local_date, schedule.end_time, tzinfo=ZoneInfo(tz_str))
 
     # Generate all slots within the working window
     slots: list[tuple[datetime, datetime]] = []
@@ -74,8 +75,8 @@ async def get_available_slots(
         slot_end = cursor + slot_delta
         # Skip break period
         if schedule.break_start and schedule.break_end:
-            break_s = datetime.combine(local_date, schedule.break_start).replace(tzinfo=shop_tz)
-            break_e = datetime.combine(local_date, schedule.break_end).replace(tzinfo=shop_tz)
+            break_s = datetime.combine(local_date, schedule.break_start, tzinfo=ZoneInfo(tz_str))
+            break_e = datetime.combine(local_date, schedule.break_end, tzinfo=ZoneInfo(tz_str))
             if cursor < break_e and slot_end > break_s:
                 cursor += slot_delta
                 continue
@@ -110,6 +111,7 @@ async def get_available_slots(
     blocks = blocked_result.scalars().all()
 
     min_start = now_local + timedelta(hours=cancel_hours)
+    print(f"DEBUG now_local: {now_local}, min_start: {min_start}, first_slot: {slots[0][0] if slots else 'none'}")
 
     available: list[AvailableSlot] = []
     for slot_local_start, slot_local_end in slots:
